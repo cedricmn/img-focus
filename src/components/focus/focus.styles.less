@@ -1,0 +1,42 @@
+@color-font: #fff;
+@color-background: #000;
+
+#focus {
+    color: @color-font;
+    background-color: @color-background;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+    row-gap: var(--img-focus-gap, 0);
+    column-gap: var(--img-focus-gap, 0);
+}
+
+#focus > div {
+    flex-grow: 1;
+}
+
+#focus.noflex > div {
+    flex-grow: unset;
+}
+
+#focus > div > img {
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+@media (min-width: 50em) {
+    #focus > div > img {
+        height: 200px;
+    }
+}
+
+@media (max-width: 50em) {
+    #focus > div {
+        width: 100%;
+    }
+}
+
+#zoom {
+    display: none;
+}

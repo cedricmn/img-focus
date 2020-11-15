@@ -1,0 +1,60 @@
+{
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module"
+    },
+    "extends": [
+        "eslint:all",
+        "plugin:jest/all",
+        "plugin:jest-formatting/strict"
+    ],
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "rules": {
+        "no-magic-numbers": [
+            "error",
+            {
+                "ignore": [-1, 0, 1]
+            }
+        ],
+        "object-curly-spacing": [
+            "error",
+            "always"
+        ],
+        "space-before-function-paren": [
+            "error",
+            {
+                "anonymous": "never",
+                "named": "never",
+                "asyncArrow": "always"
+            }
+        ],
+        "max-len": [
+            "error",
+            120
+        ]
+    },
+    "overrides": [
+        {
+            "files": "*.test.js",
+            "rules": {
+                "no-magic-numbers": "off",
+                "max-lines-per-function": [
+                    "error",
+                    150
+                ],
+                "one-var": [
+                    "error",
+                    "consecutive"
+                ],
+                "no-new": "off",
+                "max-statements": [
+                    "error",
+                    30
+                ]
+            }
+        }
+    ]
+}

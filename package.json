@@ -1,0 +1,42 @@
+{
+    "name": "img-focus",
+    "version": "1.0.0",
+    "description": "Photo gallery web component",
+    "main": "dist/img-focus.js",
+    "files": [
+        "dist/focus.js"
+    ],
+    "scripts": {
+        "test": "jest --coverage",
+        "start": "webpack-dev-server -d --hot --config webpack.config.js --watch",
+        "build": "NODE_ENV=production webpack --progress"
+    },
+    "author": "cedricmn",
+    "license": "ISC",
+    "devDependencies": {
+        "@babel/plugin-transform-modules-commonjs": "^7.10.4",
+        "css-hot-loader": "^1.4.4",
+        "css-loader": "^1.0.1",
+        "cssnano": "^4.1.10",
+        "eslint": "^5.16.0",
+        "eslint-loader": "^2.2.1",
+        "eslint-plugin-jest": "^23.20.0",
+        "eslint-plugin-jest-formatting": "^1.2.0",
+        "html-loader": "^1.3.1",
+        "htmlhint-loader": "^1.3.1",
+        "jest": "^26.5.2",
+        "jest-runner-eslint": "^0.10.0",
+        "less": "^3.12.2",
+        "less-loader": "^5.0.0",
+        "postcss-loader": "^3.0.0",
+        "style-loader": "^0.23.1",
+        "stylelint": "^9.10.1",
+        "stylelint-config-recommended": "^2.2.0",
+        "stylelint-config-standard": "^18.3.0",
+        "stylelint-webpack-plugin": "^0.10.5",
+        "terser-webpack-plugin": "^1.4.5",
+        "webpack": "^5.0.0-rc.4",
+        "webpack-cli": "^3.3.12",
+        "webpack-dev-server": "^3.11.0"
+    }
+}

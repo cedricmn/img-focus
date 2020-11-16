@@ -3,7 +3,7 @@
 
 A lightweight set of web components to display un-croped pictures.
 
-![img-focus](https://raw.githubusercontent.com/cedricmn/img-focus/master/img-focus.png)
+![img-focus](https://raw.githubusercontent.com/cedricmn/img-focus/main/img-focus.png)
 
 ## Getting started
 
@@ -12,9 +12,9 @@ Install web components through your package manager:
 npm install img-focus
 ```
 
-You can also download [dist/img-focus.js](https://github.com/cedricmn/img-focus/tree/master/dist/img-focus.js) file.
+You can also download [dist/img-focus.js](https://github.com/cedricmn/img-focus/blob/main/dist/img-focus.js) file.
 
-Import [dist/img-focus.js](https://github.com/cedricmn/img-focus/tree/master/dist/img-focus.js) in your HTML file and add following tags:
+Import [dist/img-focus.js](https://github.com/cedricmn/img-focus/blob/main/dist/img-focus.js) in your HTML file and add following tags:
 
 * `img-focus` tag to setup your gallery.
 * `img-photo` tag for each photo of your gallery and set the `srcset` attribute to list sources for each pictures. Browser will take care of using the right source at the right time.

@@ -32,7 +32,8 @@ Import [dist/img-focus.js](https://github.com/cedricmn/img-focus/blob/main/dist/
 
 CSS custom variables may be used to configure the gallery:
 
-* `img-focus-gap`: define space between photos
+* `--img-focus-gap`: define space between photos
+* `--img-focus-icons-color`: navigation icons color
 
 ## Developing
 

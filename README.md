@@ -17,15 +17,15 @@ You can also download [dist/img-focus.js](https://github.com/cedricmn/img-focus/
 Import [dist/img-focus.js](https://github.com/cedricmn/img-focus/blob/main/dist/img-focus.js) in your HTML file and add following tags:
 
 * `img-focus` tag to setup your gallery.
-* `img-photo` tag for each photo of your gallery and set the `srcset` attribute to list sources for each pictures. Browser will take care of using the right source at the right time.
+* `img-photo` tag for each photo of your gallery and set the `srcset` attribute to list sources for each pictures. Browser will take care of using the right source at the right time. Content can be appended, it will be displayed as a photo overlay.
 
 ```html
 <img-focus>
-    <img-photo
-        srcset="https://picsum.photos/seed/1/320/300 320w, https://picsum.photos/seed/1/640/600 640w, https://picsum.photos/seed/1/1080/900 1080w">
+    <img-photo srcset="https://picsum.photos/seed/1/320/300 320w, https://picsum.photos/seed/1/640/600 640w, https://picsum.photos/seed/1/1080/900 1080w">
+        My photo
     </img-photo>
-    <img-photo
-        srcset="https://picsum.photos/seed/2/320/400 320w, https://picsum.photos/seed/2/640/800 640w, https://picsum.photos/seed/2/1080/1200 1080w">
+    <img-photo srcset="https://picsum.photos/seed/2/320/400 320w, https://picsum.photos/seed/2/640/800 640w, https://picsum.photos/seed/2/1080/1200 1080w">
+        My photo
     </img-photo>
 </img-focus>
 ```

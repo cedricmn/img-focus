@@ -25,9 +25,7 @@ export class UtilTest {
 
         return {
             imgFocus: imgFocus,
-            focus: imgFocus.shadowRoot.querySelector("#focus"),
-            focusSlot: imgFocus.shadowRoot.querySelector("#slot"),
-            focusImgs: imgFocus.shadowRoot.querySelectorAll("#focus > div > img"),
+            focusSlot: imgFocus.shadowRoot.querySelector("#focus"),
             zoomSlot: imgZoom.shadowRoot.querySelector("#slot"),
             zoomPrev: imgZoom.shadowRoot.querySelector("#prev"),
             zoomNext: imgZoom.shadowRoot.querySelector("#next"),

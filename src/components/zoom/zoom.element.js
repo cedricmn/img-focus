@@ -38,7 +38,7 @@ export class ZoomElement extends HTMLElement {
 
             this.shadowRoot.querySelector(`#${id}`).addEventListener("click", () => {
 
-                const event = new Event(`imgphoto${id}`);
+                const event = new Event(`img-zoom-${id}`);
 
                 this.el.dispatchEvent(event);
 

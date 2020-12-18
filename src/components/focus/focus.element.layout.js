@@ -49,7 +49,7 @@ export class FocusElementLayout {
         this.focus.getFocusElement().classList.remove("noflex");
         this.focus.getStore().photos.forEach((photo) => {
 
-            photo.img.style.height = "";
+            photo.imgPhoto.setHeight("");
 
         });
 
@@ -130,7 +130,7 @@ export class FocusElementLayout {
                 linePhotos.forEach((linePhoto) => {
 
                     // Firefox need some margin to avoid bad layout
-                    linePhoto.img.style.height = `${newLineHeight[index] - FIREFOX_HEIGHT_MARGIN}px`;
+                    linePhoto.imgPhoto.setHeight(`${newLineHeight[index] - FIREFOX_HEIGHT_MARGIN}px`);
 
                 });
 
@@ -142,20 +142,20 @@ export class FocusElementLayout {
 
     /**
      * Get corrected width of flexbox element
-     * Chrome sometimes returns bigger photo div element right position than focus div element
+     * Chrome sometimes returns bigger photo element right position than focus element
      * @param {*} photo photo
      */
     getCorrectedWidth(photo) {
 
-        // Ignore div bigger than focus container (occurs in Chrome)
-        let { right } = photo.getDivBounding();
+        // Ignore photo bigger than focus (occurs in Chrome)
+        let { right } = photo.getBounding();
         if (right > this.focus.getFocusElementBounding().width) {
 
             right = this.focus.getFocusElementBounding().width;
 
         }
 
-        return right - photo.getDivBounding().left;
+        return right - photo.getBounding().left;
 
     }
 

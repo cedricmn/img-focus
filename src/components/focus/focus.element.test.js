@@ -28,18 +28,17 @@ describe("img-focus", () => {
 
     it("with one image sloted content", async () => {
 
-        expect.assertions(6);
+        expect.assertions(5);
 
-        const { focusSlot, focusImgs, zoomSlot } =
+        const { focusSlot, zoomSlot } =
             await UtilTest.initFocus(document, UtilTest.initPhoto(document, "focus.png 320w"));
 
         expect(focusSlot.assignedNodes()).toHaveLength(1);
         expect(focusSlot.assignedNodes()[0].srcset).toStrictEqual("focus.png 320w");
 
-        expect(focusImgs).toHaveLength(1);
-        expect(focusImgs[0].srcset).toStrictEqual("focus.png 320w");
+        expect(focusSlot.assignedNodes()[0].getImg().srcset).toStrictEqual("focus.png 320w");
 
-        focusImgs[0].dispatchEvent(new MouseEvent("click", { "bubbles": true }));
+        focusSlot.assignedNodes()[0].getImg().dispatchEvent(new MouseEvent("click", { "bubbles": true }));
 
         expect(zoomSlot.assignedNodes()).toHaveLength(1);
         expect(zoomSlot.assignedNodes()[0].srcset).toStrictEqual("focus.png 320w");
@@ -48,9 +47,9 @@ describe("img-focus", () => {
 
     it("with two images sloted content", async () => {
 
-        expect.assertions(17);
+        expect.assertions(16);
 
-        const { focusSlot, focusImgs, zoomSlot, zoomPrev, zoomNext, zoomClose } =
+        const { focusSlot, zoomSlot, zoomPrev, zoomNext, zoomClose } =
             await UtilTest.initFocus(
                 document,
                 UtilTest.initPhoto(document, "focus.png 320w"),
@@ -62,12 +61,11 @@ describe("img-focus", () => {
         expect(focusSlot.assignedNodes()[0].srcset).toStrictEqual("focus.png 320w");
         expect(focusSlot.assignedNodes()[1].srcset).toStrictEqual("focus2.png 320w");
 
-        expect(focusImgs).toHaveLength(2);
-        expect(focusImgs[0].srcset).toStrictEqual("focus.png 320w");
-        expect(focusImgs[1].srcset).toStrictEqual("focus2.png 320w");
+        expect(focusSlot.assignedNodes()[0].getImg().srcset).toStrictEqual("focus.png 320w");
+        expect(focusSlot.assignedNodes()[1].getImg().srcset).toStrictEqual("focus2.png 320w");
 
         // Open first image
-        focusImgs[0].dispatchEvent(event);
+        focusSlot.assignedNodes()[0].getImg().dispatchEvent(event);
 
         expect(zoomSlot.assignedNodes()).toHaveLength(1);
         expect(zoomSlot.assignedNodes()[0].srcset).toStrictEqual("focus.png 320w");

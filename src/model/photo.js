@@ -4,14 +4,10 @@ export class Photo {
      * Constructor
      *
      * @param {*} imgPhoto image photo element
-     * @param {*} div image surrounding div element
-     * @param {*} img image element
      */
-    constructor(imgPhoto, div, img) {
+    constructor(imgPhoto) {
 
         this.imgPhotoInner = imgPhoto;
-        this.divInner = div;
-        this.imgInner = img;
 
     }
 
@@ -25,38 +21,20 @@ export class Photo {
     }
 
     /**
-     * Get image surrounding div element
-     */
-    get div() {
-
-        return this.divInner;
-
-    }
-
-    /**
-     * Get image element
-     */
-    get img() {
-
-        return this.imgInner;
-
-    }
-
-    /**
      * Get image bounding
      */
     getImgBounding() {
 
-        return this.imgInner.getBoundingClientRect();
+        return this.imgPhotoInner.getImg().getBoundingClientRect();
 
     }
 
     /**
-     * Get surrounding div bounding
+     * Get bounding
      */
-    getDivBounding() {
+    getBounding() {
 
-        return this.divInner.getBoundingClientRect();
+        return this.imgPhotoInner.getBoundingClientRect();
 
     }
 

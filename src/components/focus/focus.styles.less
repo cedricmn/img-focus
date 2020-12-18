@@ -7,29 +7,12 @@
     column-gap: var(--img-focus-gap, 0);
 }
 
-#focus > div {
+#focus::slotted(*) {
     flex-grow: 1;
 }
 
-#focus.noflex > div {
+#focus.noflex::slotted(*) {
     flex-grow: unset;
-}
-
-#focus > div > img {
-    cursor: pointer;
-    vertical-align: middle;
-}
-
-@media (min-width: 50em) {
-    #focus > div > img {
-        height: 200px;
-    }
-}
-
-@media (max-width: 50em) {
-    #focus > div {
-        width: 100%;
-    }
 }
 
 #zoom {

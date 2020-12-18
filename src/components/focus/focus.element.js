@@ -47,7 +47,7 @@ export class FocusElement extends HTMLElement {
 
     addPhotos() {
 
-        const slotElement = this.shadowRoot.querySelector("#slot");
+        const slotElement = this.shadowRoot.querySelector("#focus");
 
         slotElement.addEventListener("slotchange", () => {
 
@@ -57,7 +57,7 @@ export class FocusElement extends HTMLElement {
 
                 if (element.tagName === "IMG-PHOTO" && !this.store.get(element)) {
 
-                    this.insertPhoto(element, previousElement);
+                    this.addPhoto(element, previousElement);
 
                 }
 
@@ -69,33 +69,26 @@ export class FocusElement extends HTMLElement {
 
     }
 
-    insertPhoto(imgPhotoElement, previousImgPhotoElement) {
+    addPhoto(imgPhotoElement, previousImgPhotoElement) {
 
-        const div = document.createElement("div"),
-            img = document.createElement("img"),
-            photo = new Photo(imgPhotoElement, div, img);
+        const photo = new Photo(imgPhotoElement);
 
-        img.srcset = imgPhotoElement.srcset;
-        img.sizes = "(min-width: 320px) 640px";
-        img.addEventListener("click", () => this.selectPhoto(photo));
-        img.addEventListener("load", () => this.layout.layout());
-        div.appendChild(img);
+        imgPhotoElement.shadowRoot.addEventListener("img-photo-click", () => this.selectPhoto(photo));
+        imgPhotoElement.shadowRoot.addEventListener("img-photo-load", () => this.layout.layout());
 
-        this.insertPhotoAfter(photo, previousImgPhotoElement);
+        this.insertPhoto(photo, previousImgPhotoElement);
 
     }
 
-    insertPhotoAfter(photo, previousImgPhotoElement) {
+    insertPhoto(photo, previousImgPhotoElement) {
 
         if (previousImgPhotoElement === null) {
 
-            this.focusElement.appendChild(photo.div);
             this.store.add(photo);
 
         } else {
 
             const previousPhoto = this.store.get(previousImgPhotoElement);
-            previousPhoto.div.parentNode.insertBefore(photo.div, previousPhoto.div.nextSibling);
             this.store.insert(photo, previousPhoto);
 
         }
@@ -126,9 +119,9 @@ export class FocusElement extends HTMLElement {
 
     addPhotoEventListener() {
 
-        this.zoomElement.shadowRoot.addEventListener("imgphotoclose", () => this.hidePhoto());
-        this.zoomElement.shadowRoot.addEventListener("imgphotoprev", () => this.prevPhoto());
-        this.zoomElement.shadowRoot.addEventListener("imgphotonext", () => this.nextPhoto());
+        this.zoomElement.shadowRoot.addEventListener("img-zoom-close", () => this.hidePhoto());
+        this.zoomElement.shadowRoot.addEventListener("img-zoom-prev", () => this.prevPhoto());
+        this.zoomElement.shadowRoot.addEventListener("img-zoom-next", () => this.nextPhoto());
 
     }
 

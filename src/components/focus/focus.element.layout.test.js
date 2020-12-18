@@ -7,12 +7,12 @@ describe("img-focus layout triggering", () => {
 
         expect.assertions(1);
 
-        const { imgFocus, focusImgs } =
+        const { imgFocus, focusSlot } =
             await UtilTest.initFocus(document, UtilTest.initPhoto(document, "focus.png 320w")),
             resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
 
         // Trigger layout
-        focusImgs[0].dispatchEvent(new Event("load", { "bubbles": true }));
+        focusSlot.assignedNodes()[0].getImg().dispatchEvent(new Event("load", { "bubbles": true }));
 
         expect(resetStyleSpy).toHaveBeenCalledWith();
 
@@ -22,20 +22,20 @@ describe("img-focus layout triggering", () => {
 
         expect.assertions(4);
 
-        const { imgFocus, focus } =
+        const { imgFocus, focusSlot } =
             await UtilTest.initFocus(document, UtilTest.initPhoto(document, "focus.png 320w")),
             event = new Event("resize-mock", { "bubbles": true }),
             onePassLayoutSpy = jest.spyOn(imgFocus.layout, "onePassLayout"),
             resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
 
         // Trigger layout
-        focus.dispatchEvent(event);
+        focusSlot.dispatchEvent(event);
 
         expect(resetStyleSpy).toHaveBeenCalledTimes(1);
         expect(onePassLayoutSpy).toHaveBeenCalledTimes(1);
 
         // No layout
-        focus.dispatchEvent(event);
+        focusSlot.dispatchEvent(event);
 
         expect(resetStyleSpy).toHaveBeenCalledTimes(1);
         expect(onePassLayoutSpy).toHaveBeenCalledTimes(1);
@@ -46,7 +46,7 @@ describe("img-focus layout triggering", () => {
 
         expect.assertions(2);
 
-        const { imgFocus, focusImgs } =
+        const { imgFocus, focusSlot } =
             await UtilTest.initFocus(document, UtilTest.initPhoto(document, "focus.png 320w")),
             getFocusElementBoundingSpy = jest.spyOn(imgFocus, "getFocusElementBounding"),
             onePassLayoutSpy = jest.spyOn(imgFocus.layout, "onePassLayout"),
@@ -60,7 +60,7 @@ describe("img-focus layout triggering", () => {
             mockImplementation(() => getFocusElementBoundingSpy.mockImplementation(() => ({ "width": 1060 })));
 
         // Trigger layout
-        focusImgs[0].dispatchEvent(new Event("load", { "bubbles": true }));
+        focusSlot.assignedNodes()[0].getImg().dispatchEvent(new Event("load", { "bubbles": true }));
 
         expect(resetStyleSpy).toHaveBeenCalledTimes(2);
         expect(onePassLayoutSpy).toHaveBeenCalledTimes(2);
@@ -75,7 +75,7 @@ describe("img-focus layout calculation", () => {
 
         expect.assertions(3);
 
-        const { imgFocus, focusImgs } =
+        const { imgFocus, focusSlot } =
             await UtilTest.initFocus(document, UtilTest.initPhoto(document, "focus.png 320w")),
             getCorrectedWidthSpy = jest.spyOn(imgFocus.layout, "getCorrectedWidth"),
             onePassLayoutSpy = jest.spyOn(imgFocus.layout, "onePassLayout"),
@@ -91,13 +91,13 @@ describe("img-focus layout calculation", () => {
          */
         jest.spyOn(imgFocus, "getFocusElementBounding").mockImplementation(() => ({ "width": 1080 }));
 
-        jest.spyOn(imgFocus.getStore().photos[0], "getDivBounding").mockImplementation(() => ({
+        jest.spyOn(imgFocus.getStore().photos[0], "getBounding").mockImplementation(() => ({
             "left": 1000,
             "right": 1081
         }));
 
         // Trigger layout
-        focusImgs[0].dispatchEvent(new Event("load", { "bubbles": true }));
+        focusSlot.assignedNodes()[0].getImg().dispatchEvent(new Event("load", { "bubbles": true }));
 
         expect(getCorrectedWidthSpy).toHaveReturnedWith(80);
         expect(onePassLayoutSpy).toHaveBeenCalledTimes(1);
@@ -109,7 +109,7 @@ describe("img-focus layout calculation", () => {
 
         expect.assertions(6);
 
-        const { imgFocus, focusImgs } =
+        const { imgFocus, focusSlot } =
             await UtilTest.initFocus(
                 document,
                 UtilTest.initPhoto(document, "focus.png 320w"),
@@ -124,7 +124,7 @@ describe("img-focus layout calculation", () => {
 
         imgFocus.getStore().photos.forEach((photo) => {
 
-            jest.spyOn(photo, "getDivBounding").mockImplementation(() => ({
+            jest.spyOn(photo, "getBounding").mockImplementation(() => ({
                 "left": 0,
                 "right": 200
             }));
@@ -138,15 +138,15 @@ describe("img-focus layout calculation", () => {
         });
 
         // Trigger layout
-        focusImgs[0].dispatchEvent(new Event("load", { "bubbles": true }));
+        focusSlot.assignedNodes()[0].getImg().dispatchEvent(new Event("load", { "bubbles": true }));
 
         expect(getCorrectedWidthSpy).toHaveBeenCalledTimes(3);
         expect(onePassLayoutSpy).toHaveBeenCalledTimes(1);
         expect(resetStyleSpy).toHaveBeenCalledTimes(1);
 
-        expect(focusImgs[0].style.height).toBe("399.99px");
-        expect(focusImgs[1].style.height).toBe("399.99px");
-        expect(focusImgs[2].style.height).toBe("");
+        expect(focusSlot.assignedNodes()[0].getImg().style.height).toBe("399.99px");
+        expect(focusSlot.assignedNodes()[1].getImg().style.height).toBe("399.99px");
+        expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("");
 
     });
 
@@ -154,7 +154,7 @@ describe("img-focus layout calculation", () => {
 
         expect.assertions(6);
 
-        const { imgFocus, focusImgs } =
+        const { imgFocus, focusSlot } =
             await UtilTest.initFocus(
                 document,
                 UtilTest.initPhoto(document, "focus.png 320w"),
@@ -170,7 +170,7 @@ describe("img-focus layout calculation", () => {
         imgFocus.getStore().photos.forEach((photo, index) => {
 
             const shift = index * 200;
-            jest.spyOn(photo, "getDivBounding").mockImplementation(() => ({
+            jest.spyOn(photo, "getBounding").mockImplementation(() => ({
                 "left": 0 + shift,
                 "right": 200 + shift
             }));
@@ -184,15 +184,15 @@ describe("img-focus layout calculation", () => {
         });
 
         // Trigger layout
-        focusImgs[0].dispatchEvent(new Event("load", { "bubbles": true }));
+        focusSlot.assignedNodes()[0].getImg().dispatchEvent(new Event("load", { "bubbles": true }));
 
         expect(getCorrectedWidthSpy).toHaveBeenCalledTimes(3);
         expect(onePassLayoutSpy).toHaveBeenCalledTimes(1);
         expect(resetStyleSpy).toHaveBeenCalledTimes(1);
 
-        expect(focusImgs[0].style.height).toBe("");
-        expect(focusImgs[1].style.height).toBe("");
-        expect(focusImgs[2].style.height).toBe("");
+        expect(focusSlot.assignedNodes()[0].getImg().style.height).toBe("");
+        expect(focusSlot.assignedNodes()[1].getImg().style.height).toBe("");
+        expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("");
 
     });
 

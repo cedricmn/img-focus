@@ -1,19 +1,15 @@
 import "../../index.js";
 
 describe("img-photo test", () => {
+  it("with no attributes", async () => {
+    expect.assertions(1);
 
-    it("with no attributes", async () => {
+    const imgPhoto = document.createElement("img-photo");
 
-        expect.assertions(1);
+    document.body.appendChild(imgPhoto);
 
-        const imgPhoto = document.createElement("img-photo");
+    await window.customElements.whenDefined("img-photo");
 
-        document.body.appendChild(imgPhoto);
-
-        await window.customElements.whenDefined("img-photo");
-
-        expect(imgPhoto.srcset).toBeNull();
-
-    });
-
+    expect(imgPhoto.srcset).toBeNull();
+  });
 });

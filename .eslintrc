@@ -1,60 +1,71 @@
 {
-    "parserOptions": {
-        "ecmaVersion": 8,
-        "sourceType": "module"
-    },
-    "extends": [
-        "eslint:all",
-        "plugin:jest/all",
-        "plugin:jest-formatting/strict"
+  "parserOptions": {
+    "ecmaVersion": 8,
+    "sourceType": "module"
+  },
+  "extends": ["eslint:all", "plugin:jest/all", "plugin:jest-formatting/strict"],
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "ignorePatterns": ["*.config.js"],
+  "rules": {
+    "indent": ["error", 2],
+    "padded-blocks": ["error", "never"],
+    "quote-props": ["error", "as-needed"],
+    "no-extra-parens": [
+      "error",
+      "all",
+      {
+        "nestedBinaryExpressions": false
+      }
     ],
-    "env": {
-        "browser": true,
-        "es6": true
-    },
-    "rules": {
-        "no-magic-numbers": [
-            "error",
-            {
-                "ignore": [-1, 0, 1]
-            }
-        ],
-        "object-curly-spacing": [
-            "error",
-            "always"
-        ],
-        "space-before-function-paren": [
-            "error",
-            {
-                "anonymous": "never",
-                "named": "never",
-                "asyncArrow": "always"
-            }
-        ],
-        "max-len": [
-            "error",
-            120
-        ]
-    },
-    "overrides": [
-        {
-            "files": "*.test.js",
-            "rules": {
-                "no-magic-numbers": "off",
-                "max-lines-per-function": [
-                    "error",
-                    150
-                ],
-                "one-var": [
-                    "error",
-                    "consecutive"
-                ],
-                "no-new": "off",
-                "max-statements": [
-                    "error",
-                    30
-                ]
-            }
-        }
-    ]
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "never"
+      }
+    ],
+    "array-element-newline": ["error", "consistent"],
+    "lines-around-comment": [
+      "error",
+      {
+        "allowClassStart": true
+      }
+    ],
+    "dot-location": ["error", "property"],
+    "function-call-argument-newline": ["error", "consistent"],
+    "no-magic-numbers": [
+      "error",
+      {
+        "ignore": [-1, 0, 1]
+      }
+    ],
+    "object-curly-spacing": ["error", "always"],
+    "space-before-function-paren": [
+      "error",
+      {
+        "anonymous": "never",
+        "named": "never",
+        "asyncArrow": "always"
+      }
+    ],
+    "max-len": ["error", 120]
+  },
+  "overrides": [
+    {
+      "files": ["*.test.js", "test/**"],
+      "rules": {
+        "no-magic-numbers": "off",
+        "max-lines-per-function": ["error", 150],
+        "one-var": ["error", "consecutive"],
+        "no-new": "off",
+        "max-statements": ["error", 30]
+      }
+    }
+  ]
 }

@@ -1,45 +1,45 @@
 @icons-color: var(--img-focus-icons-color, #fff);
 
 div#zoom {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    user-select: none;
-    z-index: 10000;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  z-index: 10000;
 }
 
 span#close {
-    position: absolute;
-    top: 1vw;
-    right: 1vw;
-    cursor: pointer;
-    color: @icons-color;
-    font-size: 2em;
+  position: absolute;
+  top: 1vw;
+  right: 1vw;
+  cursor: pointer;
+  color: @icons-color;
+  font-size: 2em;
 }
 
 span#prev {
-    position: absolute;
-    left: 2vw;
-    cursor: pointer;
-    color: @icons-color;
-    font-size: 5em;
+  position: absolute;
+  left: 2vw;
+  cursor: pointer;
+  color: @icons-color;
+  font-size: 5em;
 }
 
 span#next {
-    position: absolute;
-    right: 2vw;
-    cursor: pointer;
-    color: @icons-color;
-    font-size: 5em;
+  position: absolute;
+  right: 2vw;
+  cursor: pointer;
+  color: @icons-color;
+  font-size: 5em;
 }
 
 ::slotted(img) {
-    max-height: 90vh;
-    max-width: 90vw;
+  max-height: 90vh;
+  max-width: 90vw;
 }

@@ -1,16 +1,5 @@
-var less = require('less');
+/* global module */
 
 module.exports = {
-    process: (src) => {
-        let css = '';
-
-        less.render(
-            src, { sync: true }, (err, result) => {
-                css = result.css;
-            }
-
-        );
-
-        return "module.exports = " + JSON.stringify(css);
-    }
-}
+  process: () => `module.exports = ${JSON.stringify("")}`,
+};

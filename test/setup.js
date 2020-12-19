@@ -1,1 +1,1 @@
-import './mocks/resizeobserver.js'
+import "./mocks/resizeobserver.js";

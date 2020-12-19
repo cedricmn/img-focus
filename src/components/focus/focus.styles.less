@@ -1,20 +1,20 @@
 #focus {
-    height: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-content: start;
-    row-gap: var(--img-focus-gap, 0);
-    column-gap: var(--img-focus-gap, 0);
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
+  row-gap: var(--img-focus-gap, 0);
+  column-gap: var(--img-focus-gap, 0);
 }
 
 #focus::slotted(*) {
-    flex-grow: 1;
+  flex-grow: 1;
 }
 
 #focus.noflex::slotted(*) {
-    flex-grow: unset;
+  flex-grow: unset;
 }
 
 #zoom {
-    display: none;
+  display: none;
 }

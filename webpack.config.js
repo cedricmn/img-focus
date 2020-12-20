@@ -1,6 +1,5 @@
 "use strict";
 
-const webpack = require("webpack");
 const path = require("path");
 const StyleLintPlugin = require("stylelint-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
@@ -51,7 +50,7 @@ let config = {
         test: /\.html$/,
         use: [
           {
-            loader: "html-loader?exportAsEs6Default",
+            loader: "html-loader",
             options: {
               minimize: true,
             },
@@ -59,7 +58,6 @@ let config = {
           {
             loader: "htmlhint-loader",
             options: {
-              configFile: ".htmlhintrc",
               failOnError: true,
               failOnWarning: true,
             },
@@ -70,20 +68,18 @@ let config = {
   },
   plugins: [
     new StyleLintPlugin({
-      failOnError: false,
+      failOnError: true,
+      failOnWarning: true,
       files: "**/*.less",
       syntax: "less",
     }),
   ],
   devServer: {
     contentBase: path.resolve(__dirname, "./dist"),
-    historyApiFallback: true,
-    hot: true,
   },
   optimization: {
     minimizer: [new TerserPlugin()],
   },
-  devtool: "source-map",
 };
 
 module.exports = config;

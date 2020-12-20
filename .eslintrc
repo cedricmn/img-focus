@@ -8,7 +8,7 @@
     "browser": true,
     "es6": true
   },
-  "ignorePatterns": ["*.config.js"],
+  "ignorePatterns": ["*.config.js", "dist/**"],
   "rules": {
     "indent": ["error", 2],
     "padded-blocks": ["error", "never"],

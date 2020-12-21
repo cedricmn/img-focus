@@ -11,8 +11,17 @@
   flex-grow: 1;
 }
 
+@media (max-width: 50em) {
+  #focus::slotted(*) {
+    width: 100%;
+  }
+}
+
 #focus.noflex::slotted(*) {
   flex-grow: unset;
+
+  /* unset flex-grow after img-photo transition */
+  transition: flex-grow 1s step-end;
 }
 
 #zoom {

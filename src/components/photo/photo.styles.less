@@ -3,16 +3,22 @@ img {
   vertical-align: middle;
 }
 
+img.transition {
+  transition: height 1s ease-in-out;
+}
+
 @media (min-width: 50em) {
   img {
     height: 200px;
   }
 }
 
-#overlay {
-  position: absolute;
+@media (max-width: 50em) {
+  img {
+    width: 100%;
+  }
 }
 
-:host {
-  text-align: center;
+#overlay {
+  position: absolute;
 }

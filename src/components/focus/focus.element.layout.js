@@ -1,5 +1,5 @@
 const FIREFOX_HEIGHT_MARGIN = 0.01,
-  LAYOUT_DEBOUNCE_TIME = 100;
+  LAYOUT_DEBOUNCE_TIME = 200;
 
 /**
  * Layout focus
@@ -55,7 +55,7 @@ export class FocusElementLayout {
     // Reset styles to let do flexbox layout
     this.focus.getFocusElement().classList.remove("noflex");
     this.focus.getStore().photos.forEach((photo) => {
-      photo.imgPhoto.setHeight("");
+      photo.imgPhoto.clearHeight();
     });
   }
 

@@ -34,8 +34,14 @@ export class PhotoElement extends HTMLElement {
     this.el.appendChild(this.img);
   }
 
+  clearHeight() {
+    this.img.style.height = "";
+    this.img.classList.remove("transition");
+  }
+
   setHeight(height) {
     this.img.style.height = height;
+    this.img.classList.add("transition");
   }
 
   get srcset() {

@@ -9,7 +9,7 @@
     ],
     "scripts": {
         "test": "jest --coverage",
-        "start": "webpack serve",
+        "start": "webpack serve --mode=development",
         "build": "webpack"
     },
     "author": "cedricmn",

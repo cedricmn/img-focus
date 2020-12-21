@@ -1,4 +1,5 @@
-const FIREFOX_HEIGHT_MARGIN = 0.01;
+const FIREFOX_HEIGHT_MARGIN = 0.01,
+  LAYOUT_DEBOUNCE_TIME = 100;
 
 /**
  * Layout focus
@@ -6,15 +7,29 @@ const FIREFOX_HEIGHT_MARGIN = 0.01;
 export class FocusElementLayout {
   constructor(focus) {
     this.focus = focus;
+    this.timeout = null;
   }
 
   /**
-   * Do photo layout
+   * Debounced layout
    */
   layout() {
     // Reset styles to do calculations
-    this.resetStyles();
+    if (!this.timeoutId) {
+      this.resetStyles();
+    }
 
+    clearTimeout(this.timeoutId);
+    this.timeoutId = setTimeout(() => {
+      this.timeoutId = null;
+      this.layoutInternal();
+    }, LAYOUT_DEBOUNCE_TIME);
+  }
+
+  /**
+   * Layout
+   */
+  layoutInternal() {
     // Get focus element width before layout
     const widthBefore = this.focus.getFocusElementBounding().width;
 

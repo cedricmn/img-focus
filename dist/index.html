@@ -1,41 +1,38 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
+  <head>
     <title>focus</title>
     <script src="img-focus.js"></script>
     <style>
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #000;
-        }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+      }
 
-        :root {
-            --img-focus-gap: 5px;
-        }
+      :root {
+        --img-focus-gap: 5px;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div id="root"></div>
 
     <script>
+      const imgFocus = document.createElement("img-focus");
 
-        const imgFocus = document.createElement('img-focus');
+      for (let i = 1; i <= 100; i++) {
+        const height = 200 + 100 * (i % 3);
+        const imgPhoto = document.createElement("img-photo");
+        imgPhoto.srcset =
+          `https://picsum.photos/seed/${i}/320/${height} 320w,` +
+          ` https://picsum.photos/seed/${i}/640/${height * 2} 640w,` +
+          ` https://picsum.photos/seed/${i}/1080/${height * 3} 1080w`;
+        imgFocus.appendChild(imgPhoto);
+      }
 
-        for (let i = 1; i <= 100; i++) {
-
-            const height = 200 + 100 * (i % 3);
-            const imgPhoto = document.createElement('img-photo');
-            imgPhoto.srcset = `https://picsum.photos/seed/${i}/320/${height} 320w, https://picsum.photos/seed/${i}/640/${height * 2} 640w, https://picsum.photos/seed/${i}/1080/${height * 3} 1080w`;
-            imgFocus.appendChild(imgPhoto)
-
-        }
-
-        document.querySelector("#root").appendChild(imgFocus);
-
+      document.querySelector("#root").appendChild(imgFocus);
     </script>
-
-</body>
+  </body>
 </html>

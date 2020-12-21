@@ -1,11 +1,14 @@
 import "../../index.js";
 import { UtilTest } from "../../../test/utiltest";
 
+jest.useFakeTimers();
+
 describe("img-focus layout triggering", () => {
   it("should layout while loading", async () => {
-    expect.assertions(1);
+    expect.assertions(2);
 
     const { imgFocus, focusSlot } = await UtilTest.initFocus(document, UtilTest.initPhoto(document, "focus.png 320w")),
+      onePassLayoutSpy = jest.spyOn(imgFocus.layout, "onePassLayout"),
       resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
 
     // Trigger layout
@@ -14,7 +17,10 @@ describe("img-focus layout triggering", () => {
       .getImg()
       .dispatchEvent(new Event("load", { bubbles: true }));
 
-    expect(resetStyleSpy).toHaveBeenCalledWith();
+    jest.runAllTimers();
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(1);
+    expect(onePassLayoutSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should layout while resizing", async () => {
@@ -28,13 +34,53 @@ describe("img-focus layout triggering", () => {
     // Trigger layout
     focusSlot.dispatchEvent(event);
 
+    jest.runAllTimers();
+
     expect(resetStyleSpy).toHaveBeenCalledTimes(1);
     expect(onePassLayoutSpy).toHaveBeenCalledTimes(1);
+
+    resetStyleSpy.mockClear();
+    onePassLayoutSpy.mockClear();
 
     // No layout
     focusSlot.dispatchEvent(event);
 
+    expect(resetStyleSpy).not.toHaveBeenCalled();
+    expect(onePassLayoutSpy).not.toHaveBeenCalled();
+  });
+
+  it("should debounce layout while loading more photos", async () => {
+    expect.assertions(6);
+
+    const { imgFocus, focusSlot } = await UtilTest.initFocus(document, UtilTest.initPhoto(document, "focus.png 320w")),
+      onePassLayoutSpy = jest.spyOn(imgFocus.layout, "onePassLayout"),
+      resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
+
+    // Trigger layout
+    focusSlot
+      .assignedNodes()[0]
+      .getImg()
+      .dispatchEvent(new Event("load", { bubbles: true }));
+
     expect(resetStyleSpy).toHaveBeenCalledTimes(1);
+    expect(onePassLayoutSpy).not.toHaveBeenCalled();
+
+    resetStyleSpy.mockClear();
+
+    jest.advanceTimersByTime(100);
+
+    // Trigger layout
+    focusSlot
+      .assignedNodes()[0]
+      .getImg()
+      .dispatchEvent(new Event("load", { bubbles: true }));
+
+    expect(resetStyleSpy).not.toHaveBeenCalled();
+    expect(onePassLayoutSpy).not.toHaveBeenCalled();
+
+    jest.advanceTimersByTime(200);
+
+    expect(resetStyleSpy).not.toHaveBeenCalled();
     expect(onePassLayoutSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -57,6 +103,8 @@ describe("img-focus layout triggering", () => {
       .assignedNodes()[0]
       .getImg()
       .dispatchEvent(new Event("load", { bubbles: true }));
+
+    jest.runAllTimers();
 
     expect(resetStyleSpy).toHaveBeenCalledTimes(2);
     expect(onePassLayoutSpy).toHaveBeenCalledTimes(2);
@@ -92,6 +140,8 @@ describe("img-focus layout calculation", () => {
       .assignedNodes()[0]
       .getImg()
       .dispatchEvent(new Event("load", { bubbles: true }));
+
+    jest.runAllTimers();
 
     expect(getCorrectedWidthSpy).toHaveReturnedWith(80);
     expect(onePassLayoutSpy).toHaveBeenCalledTimes(1);
@@ -131,6 +181,8 @@ describe("img-focus layout calculation", () => {
       .assignedNodes()[0]
       .getImg()
       .dispatchEvent(new Event("load", { bubbles: true }));
+
+    jest.runAllTimers();
 
     expect(getCorrectedWidthSpy).toHaveBeenCalledTimes(3);
     expect(onePassLayoutSpy).toHaveBeenCalledTimes(1);
@@ -175,6 +227,8 @@ describe("img-focus layout calculation", () => {
       .assignedNodes()[0]
       .getImg()
       .dispatchEvent(new Event("load", { bubbles: true }));
+
+    jest.runAllTimers();
 
     expect(getCorrectedWidthSpy).toHaveBeenCalledTimes(3);
     expect(onePassLayoutSpy).toHaveBeenCalledTimes(1);

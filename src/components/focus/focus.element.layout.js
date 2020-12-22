@@ -133,11 +133,11 @@ export class FocusElementLayout {
    */
   getCorrectedWidth(photo) {
     // Ignore photo bigger than focus (occurs in Chrome)
-    let { right } = photo.getBounding();
-    if (right > this.focus.getFocusElementBounding().width) {
-      right = this.focus.getFocusElementBounding().width;
+    let boundingRight = photo.getBounding().right;
+    if (boundingRight > this.focus.getFocusElementBounding().right) {
+      boundingRight = this.focus.getFocusElementBounding().right;
     }
 
-    return right - photo.getBounding().left;
+    return boundingRight - photo.getBounding().left;
   }
 }

@@ -128,7 +128,7 @@ describe("img-focus layout calculation", () => {
      * In this case, photo div element width is calculated using width value (1080 - 1000)
      * instead of right value (1081 - 1000)
      */
-    jest.spyOn(imgFocus, "getFocusElementBounding").mockImplementation(() => ({ width: 1080 }));
+    jest.spyOn(imgFocus, "getFocusElementBounding").mockImplementation(() => ({ right: 1080 }));
 
     jest.spyOn(imgFocus.getStore().photos[0], "getBounding").mockImplementation(() => ({
       left: 1000,

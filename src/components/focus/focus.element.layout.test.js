@@ -7,7 +7,10 @@ describe("img-focus layout triggering", () => {
   it("should layout while loading", async () => {
     expect.assertions(2);
 
-    const { imgFocus, focusSlot } = await UtilTest.initFocus(document, UtilTest.initPhoto(document, "focus.png 320w")),
+    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+        document,
+        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto
+      ),
       onePassLayoutSpy = jest.spyOn(imgFocus.layout, "onePassLayout"),
       resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
 
@@ -26,7 +29,10 @@ describe("img-focus layout triggering", () => {
   it("should layout while resizing", async () => {
     expect.assertions(4);
 
-    const { imgFocus, focusSlot } = await UtilTest.initFocus(document, UtilTest.initPhoto(document, "focus.png 320w")),
+    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+        document,
+        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto
+      ),
       event = new Event("resize-mock", { bubbles: true }),
       onePassLayoutSpy = jest.spyOn(imgFocus.layout, "onePassLayout"),
       resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
@@ -52,7 +58,10 @@ describe("img-focus layout triggering", () => {
   it("should debounce layout while loading more photos", async () => {
     expect.assertions(6);
 
-    const { imgFocus, focusSlot } = await UtilTest.initFocus(document, UtilTest.initPhoto(document, "focus.png 320w")),
+    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+        document,
+        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto
+      ),
       onePassLayoutSpy = jest.spyOn(imgFocus.layout, "onePassLayout"),
       resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
 
@@ -87,7 +96,10 @@ describe("img-focus layout triggering", () => {
   it("should layout two times when scrollbar appears", async () => {
     expect.assertions(2);
 
-    const { imgFocus, focusSlot } = await UtilTest.initFocus(document, UtilTest.initPhoto(document, "focus.png 320w")),
+    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+        document,
+        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto
+      ),
       getFocusElementBoundingSpy = jest.spyOn(imgFocus, "getFocusElementBounding"),
       onePassLayoutSpy = jest.spyOn(imgFocus.layout, "onePassLayout"),
       resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
@@ -115,7 +127,10 @@ describe("img-focus layout calculation", () => {
   it("should correct bad Chrome width calculation", async () => {
     expect.assertions(3);
 
-    const { imgFocus, focusSlot } = await UtilTest.initFocus(document, UtilTest.initPhoto(document, "focus.png 320w")),
+    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+        document,
+        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto
+      ),
       getCorrectedWidthSpy = jest.spyOn(imgFocus.layout, "getCorrectedWidth"),
       onePassLayoutSpy = jest.spyOn(imgFocus.layout, "onePassLayout"),
       resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
@@ -153,9 +168,9 @@ describe("img-focus layout calculation", () => {
 
     const { imgFocus, focusSlot } = await UtilTest.initFocus(
         document,
-        UtilTest.initPhoto(document, "focus.png 320w"),
-        UtilTest.initPhoto(document, "focus2.png 320w"),
-        UtilTest.initPhoto(document, "focus3.png 320w")
+        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto,
+        (await UtilTest.initPhoto(document, "focus2.png 320w")).imgPhoto,
+        (await UtilTest.initPhoto(document, "focus3.png 320w")).imgPhoto
       ),
       getCorrectedWidthSpy = jest.spyOn(imgFocus.layout, "getCorrectedWidth"),
       onePassLayoutSpy = jest.spyOn(imgFocus.layout, "onePassLayout"),
@@ -198,9 +213,9 @@ describe("img-focus layout calculation", () => {
 
     const { imgFocus, focusSlot } = await UtilTest.initFocus(
         document,
-        UtilTest.initPhoto(document, "focus.png 320w"),
-        UtilTest.initPhoto(document, "focus2.png 320w"),
-        UtilTest.initPhoto(document, "focus3.png 320w")
+        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto,
+        (await UtilTest.initPhoto(document, "focus2.png 320w")).imgPhoto,
+        (await UtilTest.initPhoto(document, "focus3.png 320w")).imgPhoto
       ),
       getCorrectedWidthSpy = jest.spyOn(imgFocus.layout, "getCorrectedWidth"),
       onePassLayoutSpy = jest.spyOn(imgFocus.layout, "onePassLayout"),

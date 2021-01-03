@@ -24,7 +24,10 @@ describe("img-focus", () => {
   it("with one image sloted content", async () => {
     expect.assertions(5);
 
-    const { focusSlot, zoomSlot } = await UtilTest.initFocus(document, UtilTest.initPhoto(document, "focus.png 320w"));
+    const { focusSlot, zoomSlot } = await UtilTest.initFocus(
+      document,
+      (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto
+    );
 
     expect(focusSlot.assignedNodes()).toHaveLength(1);
     expect(focusSlot.assignedNodes()[0].srcset).toStrictEqual("focus.png 320w");
@@ -44,8 +47,8 @@ describe("img-focus", () => {
 
     const { focusSlot, zoomSlot, zoomPrev, zoomNext, zoomClose } = await UtilTest.initFocus(
         document,
-        UtilTest.initPhoto(document, "focus.png 320w"),
-        UtilTest.initPhoto(document, "focus2.png 320w")
+        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto,
+        (await UtilTest.initPhoto(document, "focus2.png 320w")).imgPhoto
       ),
       event = new MouseEvent("click", { bubbles: true });
 

@@ -10,6 +10,10 @@ export class PhotoElement extends HTMLElement {
     this.el = this.attachShadow({ mode: "open" });
   }
 
+  static get observedAttributes() {
+    return ["srcset"];
+  }
+
   connectedCallback() {
     const photoStylesElement = document.createElement("style"),
       photoTemplateElement = document.createElement("template");
@@ -24,14 +28,29 @@ export class PhotoElement extends HTMLElement {
     this.addPhoto();
   }
 
+  attributeChangedCallback() {
+    this.initSources();
+  }
+
   addPhoto() {
     this.img = document.createElement("img");
-    this.img.srcset = this.getAttribute("srcset");
-    this.img.sizes = "(min-width: 320px) 640px";
+    this.initSources();
     this.img.addEventListener("load", () => this.el.dispatchEvent(new Event("img-photo-load")));
     this.img.addEventListener("click", () => this.el.dispatchEvent(new Event("img-photo-click")));
 
     this.el.appendChild(this.img);
+  }
+
+  initSources() {
+    if (this.img) {
+      if (this.hasAttribute("srcset")) {
+        this.img.setAttribute("srcset", this.getAttribute("srcset"));
+        this.img.setAttribute("sizes", "(min-width: 320px) 640px");
+      } else {
+        this.img.removeAttribute("srcset");
+        this.img.removeAttribute("sizes");
+      }
+    }
   }
 
   clearHeight() {

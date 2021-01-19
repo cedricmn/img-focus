@@ -9,6 +9,7 @@
 
 #focus::slotted(*) {
   flex-grow: 1;
+  text-align: center;
 }
 
 @media (max-width: 50em) {
@@ -20,8 +21,8 @@
 #focus.noflex::slotted(*) {
   flex-grow: unset;
 
-  /* unset flex-grow after img-photo transition */
-  transition: flex-grow 1s step-end;
+  /* flex-grow transition after img-photo transition for smooth last line rendering */
+  transition: flex-grow 0.5s ease 0.5s;
 }
 
 #zoom {

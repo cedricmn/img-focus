@@ -30,22 +30,24 @@ export class FocusElementLayout {
    * Layout
    */
   layoutInternal() {
-    // Get focus element width before layout
-    const widthBefore = this.focus.getFocusElementBounding().width;
+    // Get focus element width before layout and compute new height
+    const data = this.computeNewLineHeight(),
+      widthBefore = this.focus.getFocusElementBounding().width;
 
-    // Do first layout
-    this.onePassLayout();
+    // Update focus height to force scrollbar display if needed
+    this.updateHeight(data);
 
     /*
-     * Get focus element width after layout, if it change, a scroll appears and
-     * shift content. In this case do a second pass layout with corrected width.
+     * Get focus element width after height update, if it change, a scroll appears and
+     * shift content. In this case a new layout will be performed by resize observer
+     * due to focus width update.
      */
     if (widthBefore - this.focus.getFocusElementBounding().width > 0) {
-      this.focus.getFocusElement().style.width = `${this.focus.getFocusElementBounding().width}px`;
-      this.resetStyles();
-      this.onePassLayout();
-      this.focus.getFocusElement().style.width = "";
+      return;
     }
+
+    // Update DOM with computed new height
+    this.updateDom(data);
   }
 
   /**
@@ -59,17 +61,6 @@ export class FocusElementLayout {
     });
   }
 
-  /**
-   * Do a single pass layout
-   */
-  onePassLayout() {
-    // Compute new height
-    const data = this.computeNewLineHeight();
-
-    // Update DOM with computed new height
-    this.updateDom(data.linesPhotos, data.newLineHeight);
-  }
-
   computeNewLineHeight() {
     const linesHeight = [],
       linesPhotos = [],
@@ -77,7 +68,8 @@ export class FocusElementLayout {
       linesWidth = [],
       newLineHeight = [];
 
-    let previousOffsetLeft = -1;
+    let gap = 0,
+      previousOffsetLeft = -1;
 
     // Loop on each photos to isolate lines information
     this.focus.getStore().photos.forEach((photo, index) => {
@@ -100,18 +92,41 @@ export class FocusElementLayout {
       newLineHeight.push((height * linesWidth[index]) / linesPhotosWidth[index]);
     });
 
+    // Get grid gap if there are more than one line
+    if (linesPhotos.length > 1) {
+      gap = linesPhotos[1][0].getImgBounding().top - linesPhotos[0][0].getImgBounding().bottom;
+    }
+
     return {
+      gap,
+      lineHeight: linesHeight[0],
       linesPhotos,
       newLineHeight,
     };
   }
 
   /**
-   * Update DOM with new height
-   * @param {*} linesPhotos array of photos for each lines
-   * @param {*} newLineHeight array of new height for each lines
+   * Update focus height to let scrollbar appear
+   * @param {Object} data computed new line height
+   * @param {*} data.newLineHeight array of new height for each lines
+   * @param {*} data.lineHeight initial line height that will be used for last line
+   * @param {*} data.gap grid gap
    */
-  updateDom(linesPhotos, newLineHeight) {
+  updateHeight({ newLineHeight, lineHeight, gap }) {
+    const totalHeight = newLineHeight
+      .slice(0, -1)
+      .reduce((accumulator, value) => accumulator + value + gap, lineHeight);
+
+    this.focus.getFocusElement().style.height = `${totalHeight}px`;
+  }
+
+  /**
+   * Update DOM with new height
+   * @param {Object} data computed new line height
+   * @param {*} data.linesPhotos array of photos for each lines
+   * @param {*} data.newLineHeight array of new height for each lines
+   */
+  updateDom({ linesPhotos, newLineHeight }) {
     // Avoids 1 pixel space between pictures on Chrome
     this.focus.getFocusElement().classList.add("noflex");
 

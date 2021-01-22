@@ -22,14 +22,37 @@ export class ZoomElement extends HTMLElement {
   }
 
   addHandlers() {
-    const idList = ["close", "prev", "next"];
+    const CLOSE = "close",
+      NEXT = "next",
+      PREV = "prev";
 
-    for (const id of idList) {
-      this.shadowRoot.querySelector(`#${id}`).addEventListener("click", () => {
-        const event = new Event(`img-zoom-${id}`);
+    // Keyboard navigation
+    this.tabIndex = 0;
+    this.addEventListener("keydown", (event) => {
+      switch (event.key) {
+        case "ArrowUp":
+        case "ArrowLeft":
+          this.sendEvent(PREV);
+          break;
+        case "ArrowDown":
+        case "ArrowRight":
+          this.sendEvent(NEXT);
+          break;
+        case "Escape":
+          this.sendEvent(CLOSE);
+          break;
+        default:
+          return;
+      }
+      event.preventDefault();
+    });
 
-        this.el.dispatchEvent(event);
-      });
+    for (const id of [CLOSE, PREV, NEXT]) {
+      this.shadowRoot.querySelector(`#${id}`).addEventListener("click", () => this.sendEvent(id));
     }
+  }
+
+  sendEvent(id) {
+    this.el.dispatchEvent(new Event(`img-zoom-${id}`));
   }
 }

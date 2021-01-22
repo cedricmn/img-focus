@@ -10,7 +10,13 @@
   },
   "ignorePatterns": ["*.config.js", "dist/**"],
   "rules": {
-    "indent": ["error", 2],
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
     "padded-blocks": ["error", "never"],
     "quote-props": ["error", "as-needed"],
     "no-extra-parens": [
@@ -54,7 +60,13 @@
         "asyncArrow": "always"
       }
     ],
-    "max-len": ["error", 120]
+    "max-len": ["error", 120],
+    "object-property-newline": [
+      "error",
+      {
+        "allowAllPropertiesOnSameLine": true
+      }
+    ]
   },
   "overrides": [
     {

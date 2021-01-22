@@ -124,6 +124,7 @@ export class FocusElement extends HTMLElement {
     currentPhoto.srcset = photo.imgPhoto.srcset;
     currentPhoto.size = "100vw";
     this.zoomElement.style.display = "block";
+    this.zoomElement.focus();
   }
 
   hidePhoto() {

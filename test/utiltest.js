@@ -70,6 +70,7 @@ export class UtilTest {
     document.body.appendChild(imgZoom);
 
     return {
+      imgZoom,
       zoomClose: imgZoom.shadowRoot.querySelector("#close"),
       zoomNext: imgZoom.shadowRoot.querySelector("#next"),
       zoomPrev: imgZoom.shadowRoot.querySelector("#prev"),

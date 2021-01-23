@@ -18,13 +18,20 @@ export class ZoomElement extends HTMLElement {
     this.el.appendChild(zoomTemplateElement);
     this.el.appendChild(zoomTemplateElement.content.cloneNode(true));
 
-    this.addHandlers();
+    this.setup();
   }
 
-  addHandlers() {
+  setup() {
     const CLOSE = "close",
       NEXT = "next",
       PREV = "prev";
+
+    // Close while not clicking on actions
+    this.el.querySelector("#zoom").addEventListener("click", (event) => {
+      if (![CLOSE, PREV, NEXT].includes(event.target.id)) {
+        this.sendEvent(CLOSE);
+      }
+    });
 
     // Keyboard navigation
     this.tabIndex = 0;

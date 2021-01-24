@@ -33,6 +33,14 @@ export class PhotoStore {
   }
 
   /**
+   * Get current photo
+   * @returns {*} current photo
+   */
+  getCurrent() {
+    return this.current;
+  }
+
+  /**
    * Navigate to previous photo
    * @returns {*} previous photo
    */

@@ -1,7 +1,7 @@
 import "../../index.js";
 import { UtilTest } from "../../../test/utiltest.js";
 
-describe("img-zoom slot", () => {
+describe("img-zoom", () => {
   it("without content", async () => {
     expect.assertions(3);
 
@@ -40,7 +40,7 @@ describe("img-zoom slot", () => {
   });
 });
 
-describe("img-zoom navigation events", () => {
+describe("img-zoom navigation", () => {
   it("with keyboard", async () => {
     expect.assertions(4);
 

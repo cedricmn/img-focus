@@ -25,20 +25,30 @@ export class PhotoElement extends HTMLElement {
     this.el.appendChild(photoTemplateElement);
     this.el.appendChild(photoTemplateElement.content.cloneNode(true));
 
-    this.addPhoto();
+    this.tabIndex = 0;
+
+    this.setup();
+  }
+
+  setup() {
+    // Keyboard navigation
+    this.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        this.el.dispatchEvent(new Event("img-photo-select"));
+        event.preventDefault();
+      }
+    });
+
+    this.img = document.createElement("img");
+    this.img.addEventListener("load", () => this.el.dispatchEvent(new Event("img-photo-load")));
+    this.img.addEventListener("click", () => this.el.dispatchEvent(new Event("img-photo-select")));
+    this.initSources();
+
+    this.el.appendChild(this.img);
   }
 
   attributeChangedCallback() {
     this.initSources();
-  }
-
-  addPhoto() {
-    this.img = document.createElement("img");
-    this.initSources();
-    this.img.addEventListener("load", () => this.el.dispatchEvent(new Event("img-photo-load")));
-    this.img.addEventListener("click", () => this.el.dispatchEvent(new Event("img-photo-click")));
-
-    this.el.appendChild(this.img);
   }
 
   initSources() {

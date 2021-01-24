@@ -18,6 +18,8 @@ export class ZoomElement extends HTMLElement {
     this.el.appendChild(zoomTemplateElement);
     this.el.appendChild(zoomTemplateElement.content.cloneNode(true));
 
+    this.tabIndex = 0;
+
     this.setup();
   }
 
@@ -34,7 +36,6 @@ export class ZoomElement extends HTMLElement {
     });
 
     // Keyboard navigation
-    this.tabIndex = 0;
     this.addEventListener("keydown", (event) => {
       switch (event.key) {
         case "ArrowUp":
@@ -55,7 +56,10 @@ export class ZoomElement extends HTMLElement {
     });
 
     for (const id of [CLOSE, PREV, NEXT]) {
-      this.shadowRoot.querySelector(`#${id}`).addEventListener("click", () => this.sendEvent(id));
+      this.shadowRoot.querySelector(`#${id}`).addEventListener("click", (event) => {
+        this.sendEvent(id);
+        event.preventDefault();
+      });
     }
   }
 

@@ -25,6 +25,8 @@ export class FocusElement extends HTMLElement {
     this.el.appendChild(focusTemplateElement);
     this.el.appendChild(focusTemplateElement.content.cloneNode(true));
 
+    this.tabIndex = 0;
+
     this.setup();
   }
 
@@ -57,7 +59,7 @@ export class FocusElement extends HTMLElement {
   addPhoto(imgPhotoElement, previousImgPhotoElement) {
     const photo = new Photo(imgPhotoElement);
 
-    imgPhotoElement.shadowRoot.addEventListener("img-photo-click", () => this.selectPhoto(photo));
+    imgPhotoElement.shadowRoot.addEventListener("img-photo-select", () => this.selectPhoto(photo));
     imgPhotoElement.shadowRoot.addEventListener("img-photo-load", () => this.layout.layout());
 
     this.insertPhoto(photo, previousImgPhotoElement);
@@ -97,6 +99,8 @@ export class FocusElement extends HTMLElement {
   selectPhoto(photo) {
     this.store.select(photo);
     this.displayPhoto(photo);
+    this.zoomElement.style.display = "block";
+    this.zoomElement.focus({ preventScroll: true });
   }
 
   prevPhoto() {
@@ -123,13 +127,13 @@ export class FocusElement extends HTMLElement {
 
     currentPhoto.srcset = photo.imgPhoto.srcset;
     currentPhoto.size = "100vw";
-    this.zoomElement.style.display = "block";
-    this.zoomElement.focus();
   }
 
   hidePhoto() {
     this.zoomElement.style.display = "none";
     this.zoomElement.removeChild(this.zoomElement.querySelector("#currentphoto"));
+    // Focus last openned photo
+    this.store.getCurrent().imgPhoto.focus();
   }
 
   /**

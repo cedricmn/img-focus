@@ -18,7 +18,6 @@ div#zoom {
 #next,
 #close {
   position: absolute;
-  cursor: pointer;
   color: @icons-color;
   padding: 1.5rem;
   text-decoration: none;
@@ -38,6 +37,12 @@ div#zoom {
 #next {
   font-size: 5rem;
   right: 0;
+}
+
+#prev.disabled,
+#next.disabled {
+  opacity: 0.3;
+  cursor: default;
 }
 
 ::slotted(img) {

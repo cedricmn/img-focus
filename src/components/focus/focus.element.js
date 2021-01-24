@@ -125,8 +125,19 @@ export class FocusElement extends HTMLElement {
       this.zoomElement.appendChild(currentPhoto);
     }
 
+    this.updateZoomAttribute("hasprevious", this.store.hasPrev(photo));
+    this.updateZoomAttribute("hasnext", this.store.hasNext(photo));
+
     currentPhoto.srcset = photo.imgPhoto.srcset;
     currentPhoto.size = "100vw";
+  }
+
+  updateZoomAttribute(name, value) {
+    if (value) {
+      this.zoomElement.setAttribute(name, "");
+    } else {
+      this.zoomElement.removeAttribute(name);
+    }
   }
 
   hidePhoto() {

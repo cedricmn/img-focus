@@ -73,15 +73,15 @@ export class PhotoElement extends HTMLElement {
     this.img.classList.add("transition");
   }
 
+  getImg() {
+    return this.img;
+  }
+
   get srcset() {
     return this.getAttribute("srcset");
   }
 
   set srcset(srcset) {
     this.setAttribute("srcset", srcset);
-  }
-
-  getImg() {
-    return this.img;
   }
 }

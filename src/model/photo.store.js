@@ -45,12 +45,33 @@ export class PhotoStore {
    * @returns {*} previous photo
    */
   prev() {
-    const index = this.photosInner.indexOf(this.current);
+    const prevPhoto = this.getPrev(this.current);
+    if (prevPhoto !== null) {
+      this.current = prevPhoto;
+    }
+    return prevPhoto;
+  }
+
+  /**
+   * Has previous photo
+   * @param {*} photo photo to check previous
+   * @returns {*} true if photo has previous photo
+   */
+  hasPrev(photo) {
+    return this.getPrev(photo) !== null;
+  }
+
+  /**
+   * Get previous photo
+   * @param {*} photo photo to get previous
+   * @returns {*} previous photo
+   */
+  getPrev(photo) {
+    const index = this.photosInner.indexOf(photo);
     if (index === 0) {
       return null;
     }
-    this.current = this.photosInner[index - 1];
-    return this.current;
+    return this.photosInner[index - 1];
   }
 
   /**
@@ -58,12 +79,33 @@ export class PhotoStore {
    * @returns {*} next photo
    */
   next() {
-    const index = this.photosInner.indexOf(this.current);
+    const nextPhoto = this.getNext(this.current);
+    if (nextPhoto !== null) {
+      this.current = nextPhoto;
+    }
+    return nextPhoto;
+  }
+
+  /**
+   * Has next photo
+   * @param {*} photo photo to check next
+   * @returns {*} true if photo has next photo
+   */
+  hasNext(photo) {
+    return this.getNext(photo) !== null;
+  }
+
+  /**
+   * Get next photo
+   * @param {*} photo photo to get next
+   * @returns {*} next photo
+   */
+  getNext(photo) {
+    const index = this.photosInner.indexOf(photo);
     if (index === this.photosInner.length - 1) {
       return null;
     }
-    this.current = this.photosInner[index + 1];
-    return this.current;
+    return this.photosInner[index + 1];
   }
 
   /**

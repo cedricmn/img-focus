@@ -18,7 +18,7 @@ describe("img-zoom", () => {
     const paragraph = document.createElement("p");
     paragraph.append("A paragraph");
 
-    const { zoomSlot } = await UtilTest.initZoom(document, paragraph);
+    const { zoomSlot } = await UtilTest.initZoom(document, {}, paragraph);
 
     expect(zoomSlot).toBeDefined();
     expect(zoomSlot.assignedNodes()).toBeDefined();
@@ -32,11 +32,57 @@ describe("img-zoom", () => {
     img.srcset = "focus.png 320w";
     img.size = "100vw";
 
-    const { zoomSlot } = await UtilTest.initZoom(document, img);
+    const { zoomSlot } = await UtilTest.initZoom(document, {}, img);
 
     expect(zoomSlot).not.toBeNull();
     expect(zoomSlot.assignedNodes()).toHaveLength(1);
     expect(zoomSlot.assignedNodes()[0].srcset).toStrictEqual("focus.png 320w");
+  });
+
+  it("with changing hasprevious attribute", async () => {
+    expect.assertions(5);
+
+    const { zoomSlot, imgZoom, zoomPrev } = await UtilTest.initZoom(document, { hasPrevious: true });
+
+    expect(zoomSlot).not.toBeNull();
+    expect(zoomPrev.classList.contains("disabled")).toBeFalsy();
+
+    imgZoom.removeAttribute("hasprevious");
+
+    expect(zoomPrev.classList.contains("disabled")).toBeTruthy();
+
+    imgZoom.hasprevious = "";
+
+    expect(zoomPrev.classList.contains("disabled")).toBeFalsy();
+    expect(imgZoom.hasprevious).toStrictEqual("");
+  });
+
+  it("with changing hasnext attribute", async () => {
+    expect.assertions(5);
+
+    const { zoomSlot, imgZoom, zoomNext } = await UtilTest.initZoom(document, { hasNext: true });
+
+    expect(zoomSlot).not.toBeNull();
+    expect(zoomNext.classList.contains("disabled")).toBeFalsy();
+
+    imgZoom.removeAttribute("hasnext");
+
+    expect(zoomNext.classList.contains("disabled")).toBeTruthy();
+
+    imgZoom.hasnext = "";
+
+    expect(zoomNext.classList.contains("disabled")).toBeFalsy();
+    expect(imgZoom.hasnext).toStrictEqual("");
+  });
+
+  it("with default hasprevious and hasnext attributes", async () => {
+    expect.assertions(3);
+
+    const { zoomSlot, zoomPrev, zoomNext } = await UtilTest.initZoom(document);
+
+    expect(zoomSlot).not.toBeNull();
+    expect(zoomPrev.classList.contains("disabled")).toBeTruthy();
+    expect(zoomNext.classList.contains("disabled")).toBeTruthy();
   });
 });
 
@@ -51,7 +97,7 @@ describe("img-zoom navigation", () => {
     img.srcset = "focus.png 320w";
     img.size = "100vw";
 
-    const { zoomSlot, imgZoom } = await UtilTest.initZoom(document, img);
+    const { zoomSlot, imgZoom } = await UtilTest.initZoom(document, {}, img);
     imgZoom.shadowRoot.addEventListener("img-zoom-prev", eventPrevSpy);
     imgZoom.shadowRoot.addEventListener("img-zoom-next", eventNextSpy);
     imgZoom.shadowRoot.addEventListener("img-zoom-close", eventCloseSpy);
@@ -80,7 +126,7 @@ describe("img-zoom navigation", () => {
     img.srcset = "focus.png 320w";
     img.size = "100vw";
 
-    const { zoomSlot, imgZoom, zoomClose, zoomNext, zoomPrev } = await UtilTest.initZoom(document, img);
+    const { zoomSlot, imgZoom, zoomClose, zoomNext, zoomPrev } = await UtilTest.initZoom(document, {}, img);
     imgZoom.shadowRoot.addEventListener("img-zoom-prev", eventPrevSpy);
     imgZoom.shadowRoot.addEventListener("img-zoom-next", eventNextSpy);
     imgZoom.shadowRoot.addEventListener("img-zoom-close", eventCloseSpy);
@@ -105,7 +151,7 @@ describe("img-zoom navigation", () => {
     img.srcset = "focus.png 320w";
     img.size = "100vw";
 
-    const { zoomSlot, imgZoom } = await UtilTest.initZoom(document, img);
+    const { zoomSlot, imgZoom } = await UtilTest.initZoom(document, {}, img);
     imgZoom.shadowRoot.addEventListener("img-zoom-prev", eventPrevSpy);
     imgZoom.shadowRoot.addEventListener("img-zoom-next", eventNextSpy);
     imgZoom.shadowRoot.addEventListener("img-zoom-close", eventCloseSpy);

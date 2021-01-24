@@ -58,12 +58,21 @@ export class UtilTest {
    * Initialize zoom element
    *
    * @param {*} document document
+   * @param {Object} data attributes default values
+   * @param {*} data.hasPrevious has previous picture
+   * @param {*} data.hasNext has next picture
    * @param  {...any} childs zoom element childs
    */
-  static async initZoom(document, ...childs) {
+  static async initZoom(document, { hasPrevious, hasNext } = {}, ...childs) {
     await window.customElements.whenDefined("img-zoom");
 
     const imgZoom = document.createElement("img-zoom");
+    if (hasPrevious) {
+      imgZoom.hasprevious = "";
+    }
+    if (hasNext) {
+      imgZoom.hasnext = "";
+    }
     if (childs) {
       childs.forEach((child) => imgZoom.appendChild(child));
     }

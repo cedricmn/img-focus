@@ -7,6 +7,14 @@ export class ZoomElement extends HTMLElement {
     this.el = this.attachShadow({ mode: "open" });
   }
 
+  static get observedAttributes() {
+    return ["hasprevious", "hasnext"];
+  }
+
+  attributeChangedCallback() {
+    this.updateState();
+  }
+
   connectedCallback() {
     const zoomStylesElement = document.createElement("style"),
       zoomTemplateElement = document.createElement("template");
@@ -24,6 +32,11 @@ export class ZoomElement extends HTMLElement {
   }
 
   setup() {
+    this.prevElement = this.el.querySelector("#prev");
+    this.nextElement = this.el.querySelector("#next");
+
+    this.updateState();
+
     const CLOSE = "close",
       NEXT = "next",
       PREV = "prev";
@@ -63,7 +76,40 @@ export class ZoomElement extends HTMLElement {
     }
   }
 
+  updateState() {
+    if (this.prevElement) {
+      ZoomElement.disable(this.prevElement, !this.hasAttribute("hasprevious"));
+    }
+    if (this.nextElement) {
+      ZoomElement.disable(this.nextElement, !this.hasAttribute("hasnext"));
+    }
+  }
+
+  static disable(element, disabled) {
+    if (disabled) {
+      element.classList.add("disabled");
+    } else {
+      element.classList.remove("disabled");
+    }
+  }
+
   sendEvent(id) {
     this.el.dispatchEvent(new Event(`img-zoom-${id}`));
+  }
+
+  get hasprevious() {
+    return this.getAttribute("hasprevious");
+  }
+
+  set hasprevious(hasprevious) {
+    this.setAttribute("hasprevious", hasprevious);
+  }
+
+  get hasnext() {
+    return this.getAttribute("hasnext");
+  }
+
+  set hasnext(hasnext) {
+    this.setAttribute("hasnext", hasnext);
   }
 }

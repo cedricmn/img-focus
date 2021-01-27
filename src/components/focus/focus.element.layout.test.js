@@ -9,7 +9,7 @@ describe("img-focus layout triggering", () => {
 
     const { imgFocus, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto
       ),
       layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal"),
       resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
@@ -31,7 +31,7 @@ describe("img-focus layout triggering", () => {
 
     const { imgFocus, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto
       ),
       event = new Event("resize-mock", { bubbles: true }),
       layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal"),
@@ -60,7 +60,7 @@ describe("img-focus layout triggering", () => {
 
     const { imgFocus, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto
       ),
       event = new Event("load", { bubbles: true }),
       layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal"),
@@ -93,7 +93,7 @@ describe("img-focus layout triggering", () => {
 
     const { imgFocus, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto
       ),
       event = new Event("load", { bubbles: true }),
       getFocusElementBoundingSpy = jest.spyOn(imgFocus, "getFocusElementBounding"),
@@ -136,7 +136,7 @@ describe("img-focus layout calculation", () => {
 
     const { imgFocus, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto
       ),
       event = new Event("load", { bubbles: true }),
       getCorrectedWidthSpy = jest.spyOn(imgFocus.layout, "getCorrectedWidth"),
@@ -173,9 +173,9 @@ describe("img-focus layout calculation", () => {
 
     const { imgFocus, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto,
-        (await UtilTest.initPhoto(document, "focus2.png 320w")).imgPhoto,
-        (await UtilTest.initPhoto(document, "focus3.png 320w")).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto,
+        (await UtilTest.initPhoto(document, { srcset: "focus2.png 320w" })).imgPhoto,
+        (await UtilTest.initPhoto(document, { srcset: "focus3.png 320w" })).imgPhoto
       ),
       event = new Event("load", { bubbles: true }),
       getCorrectedWidthSpy = jest.spyOn(imgFocus.layout, "getCorrectedWidth"),
@@ -220,9 +220,9 @@ describe("img-focus layout calculation", () => {
 
     const { imgFocus, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto,
-        (await UtilTest.initPhoto(document, "focus2.png 320w")).imgPhoto,
-        (await UtilTest.initPhoto(document, "focus3.png 320w")).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto,
+        (await UtilTest.initPhoto(document, { srcset: "focus2.png 320w" })).imgPhoto,
+        (await UtilTest.initPhoto(document, { srcset: "focus3.png 320w" })).imgPhoto
       ),
       event = new Event("load", { bubbles: true }),
       getCorrectedWidthSpy = jest.spyOn(imgFocus.layout, "getCorrectedWidth"),

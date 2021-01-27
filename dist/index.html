@@ -18,8 +18,9 @@
 
       :root {
         --img-focus-gap: 5px;
-        --img-focus-icons-color: #ccc;
         --img-focus-lines-height: 180px;
+        --img-focus-icons-color: #ccc;
+        --img-focus-caption-color: #999;
       }
     </style>
   </head>
@@ -36,6 +37,7 @@
           `https://picsum.photos/seed/${i}/320/${height} 320w,` +
           ` https://picsum.photos/seed/${i}/640/${height * 2} 640w,` +
           ` https://picsum.photos/seed/${i}/1080/${height * 3} 1080w`;
+        imgPhoto.alt = `Picture ${i}`
         imgFocus.appendChild(imgPhoto);
       }
 

@@ -1,3 +1,5 @@
+@caption-color: var(--img-focus-caption-color, #fff);
+
 #focus {
   height: 100%;
   display: flex;
@@ -27,4 +29,24 @@
 
 #zoom {
   display: none;
+}
+
+#zoom-figure {
+  display: grid;
+  grid-template-rows: 2em auto 2em;
+}
+
+#zoom-image {
+  grid-row-start: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+#zoom-figcaption {
+  grid-row-start: 3;
+  align-self: center;
+  text-align: center;
+  font-family: sans-serif;
+  color: @caption-color;
 }

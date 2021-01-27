@@ -1,3 +1,4 @@
+import { Util } from "../../util/util";
 import photoStyles from "./photo.styles.less";
 import photoTemplate from "./photo.template.html";
 
@@ -11,7 +12,7 @@ export class PhotoElement extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["srcset"];
+    return ["srcset", "alt"];
   }
 
   connectedCallback() {
@@ -53,11 +54,11 @@ export class PhotoElement extends HTMLElement {
 
   initSources() {
     if (this.img) {
+      Util.copyAttribute(this, this.img, "srcset");
+      Util.copyAttribute(this, this.img, "alt");
       if (this.hasAttribute("srcset")) {
-        this.img.setAttribute("srcset", this.getAttribute("srcset"));
         this.img.setAttribute("sizes", "(min-width: 320px) 640px");
       } else {
-        this.img.removeAttribute("srcset");
         this.img.removeAttribute("sizes");
       }
     }
@@ -83,5 +84,13 @@ export class PhotoElement extends HTMLElement {
 
   set srcset(srcset) {
     this.setAttribute("srcset", srcset);
+  }
+
+  get alt() {
+    return this.getAttribute("alt");
+  }
+
+  set alt(alt) {
+    this.setAttribute("alt", alt);
   }
 }

@@ -15,7 +15,7 @@ describe("img-photo", () => {
   it("with changing srcset attribute", async () => {
     expect.assertions(5);
 
-    const { imgPhoto } = await UtilTest.initPhoto(document, "focus.png 320w");
+    const { imgPhoto } = await UtilTest.initPhoto(document, { srcset: "focus.png 320w" });
 
     expect(imgPhoto).not.toBeNull();
     expect(imgPhoto.getImg().srcset).toStrictEqual("focus.png 320w");
@@ -27,13 +27,26 @@ describe("img-photo", () => {
     expect(imgPhoto.getImg().sizes).toStrictEqual("(min-width: 320px) 640px");
   });
 
+  it("with changing alt attribute", async () => {
+    expect.assertions(3);
+
+    const { imgPhoto } = await UtilTest.initPhoto(document, { alt: "Focus photo", srcset: "focus.png 320w" });
+
+    expect(imgPhoto).not.toBeNull();
+    expect(imgPhoto.getImg().alt).toStrictEqual("Focus photo");
+
+    imgPhoto.alt = "";
+
+    expect(imgPhoto.getImg().alt).toStrictEqual("");
+  });
+
   it("with overlay", async () => {
     expect.assertions(3);
 
     const paragraph = document.createElement("p");
     paragraph.append("A paragraph");
 
-    const { imgPhoto, photoSlot } = await UtilTest.initPhoto(document, "focus.png 320w", paragraph);
+    const { imgPhoto, photoSlot } = await UtilTest.initPhoto(document, { srcset: "focus.png 320w" }, paragraph);
 
     expect(imgPhoto).not.toBeNull();
     expect(photoSlot.assignedNodes()).toHaveLength(1);
@@ -45,7 +58,7 @@ describe("img-photo navigation", () => {
   it("with keyboard", async () => {
     expect.assertions(2);
 
-    const { imgPhoto } = await UtilTest.initPhoto(document, "focus.png 320w"),
+    const { imgPhoto } = await UtilTest.initPhoto(document, { srcset: "focus.png 320w" }),
       eventSelectSpy = jest.fn();
     imgPhoto.shadowRoot.addEventListener("img-photo-select", eventSelectSpy);
     imgPhoto.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Enter" }));
@@ -59,7 +72,7 @@ describe("img-photo navigation", () => {
   it("with click", async () => {
     expect.assertions(2);
 
-    const { imgPhoto } = await UtilTest.initPhoto(document, "focus.png 320w"),
+    const { imgPhoto } = await UtilTest.initPhoto(document, { srcset: "focus.png 320w" }),
       clickEvent = new MouseEvent("click", { bubbles: true }),
       eventSelectSpy = jest.fn();
     imgPhoto.shadowRoot.addEventListener("img-photo-select", eventSelectSpy);

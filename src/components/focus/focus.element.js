@@ -1,6 +1,7 @@
 import { FocusElementLayout } from "./focus.element.layout";
 import { Photo } from "../../model/photo";
 import { PhotoStore } from "../../model/photo.store";
+import { Util } from "../../util/util";
 import focusStyles from "./focus.styles.less";
 import focusTemplate from "./focus.template.html";
 
@@ -118,31 +119,28 @@ export class FocusElement extends HTMLElement {
   }
 
   displayPhoto(photo) {
-    let currentPhoto = this.zoomElement.querySelector("#currentphoto");
-    if (!currentPhoto) {
-      currentPhoto = document.createElement("img");
-      currentPhoto.id = "currentphoto";
-      this.zoomElement.appendChild(currentPhoto);
-    }
+    const figcaption = this.zoomElement.querySelector("#zoom-figcaption"),
+      image = this.zoomElement.querySelector("#zoom-image");
 
-    this.updateZoomAttribute("hasprevious", this.store.hasPrev(photo));
-    this.updateZoomAttribute("hasnext", this.store.hasNext(photo));
+    Util.setBooleanAttribute(this.zoomElement, "hasprevious", this.store.hasPrev(photo));
+    Util.setBooleanAttribute(this.zoomElement, "hasnext", this.store.hasNext(photo));
+    Util.copyAttribute(photo.imgPhoto, image, "alt");
+    Util.copyAttribute(photo.imgPhoto, image, "srcset");
+    Util.setAttribute(image, "size", "100vw");
 
-    currentPhoto.srcset = photo.imgPhoto.srcset;
-    currentPhoto.size = "100vw";
-  }
-
-  updateZoomAttribute(name, value) {
-    if (value) {
-      this.zoomElement.setAttribute(name, "");
-    } else {
-      this.zoomElement.removeAttribute(name);
-    }
+    figcaption.textContent = photo.imgPhoto.alt;
   }
 
   hidePhoto() {
+    const figcaption = this.zoomElement.querySelector("#zoom-figcaption"),
+      image = this.zoomElement.querySelector("#zoom-image");
+
     this.zoomElement.style.display = "none";
-    this.zoomElement.removeChild(this.zoomElement.querySelector("#currentphoto"));
+    image.alt = "";
+    image.srcset = "";
+    image.size = "";
+    figcaption.textContent = "";
+
     // Focus last openned photo
     this.store.getCurrent().imgPhoto.focus();
   }

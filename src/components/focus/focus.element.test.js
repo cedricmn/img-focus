@@ -25,30 +25,28 @@ describe("img-focus", () => {
     expect.assertions(5);
 
     const { focusSlot, zoomSlot } = await UtilTest.initFocus(
-      document,
-      (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto
-    );
+        document,
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto
+      ),
+      event = new MouseEvent("click", { bubbles: true });
 
     expect(focusSlot.assignedNodes()).toHaveLength(1);
     expect(focusSlot.assignedNodes()[0].srcset).toStrictEqual("focus.png 320w");
     expect(focusSlot.assignedNodes()[0].getImg().srcset).toStrictEqual("focus.png 320w");
 
-    focusSlot
-      .assignedNodes()[0]
-      .getImg()
-      .dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    focusSlot.assignedNodes()[0].getImg().dispatchEvent(event);
 
     expect(zoomSlot.assignedNodes()).toHaveLength(1);
-    expect(zoomSlot.assignedNodes()[0].srcset).toStrictEqual("focus.png 320w");
+    expect(zoomSlot.assignedNodes()[0].querySelector("#zoom-image").srcset).toStrictEqual("focus.png 320w");
   });
 
   it("with two images sloted content", async () => {
-    expect.assertions(16);
+    expect.assertions(12);
 
     const { focusSlot, zoomSlot, zoomPrev, zoomNext, zoomClose } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, "focus.png 320w")).imgPhoto,
-        (await UtilTest.initPhoto(document, "focus2.png 320w")).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto,
+        (await UtilTest.initPhoto(document, { srcset: "focus2.png 320w" })).imgPhoto
       ),
       event = new MouseEvent("click", { bubbles: true });
 
@@ -63,35 +61,31 @@ describe("img-focus", () => {
     focusSlot.assignedNodes()[0].getImg().dispatchEvent(event);
 
     expect(zoomSlot.assignedNodes()).toHaveLength(1);
-    expect(zoomSlot.assignedNodes()[0].srcset).toStrictEqual("focus.png 320w");
+    expect(zoomSlot.assignedNodes()[0].querySelector("#zoom-image").srcset).toStrictEqual("focus.png 320w");
 
     // Navigate to next image
     zoomNext.dispatchEvent(event);
 
-    expect(zoomSlot.assignedNodes()).toHaveLength(1);
-    expect(zoomSlot.assignedNodes()[0].srcset).toStrictEqual("focus2.png 320w");
+    expect(zoomSlot.assignedNodes()[0].querySelector("#zoom-image").srcset).toStrictEqual("focus2.png 320w");
 
     // Try to navigate to next image
     zoomNext.dispatchEvent(event);
 
-    expect(zoomSlot.assignedNodes()).toHaveLength(1);
-    expect(zoomSlot.assignedNodes()[0].srcset).toStrictEqual("focus2.png 320w");
+    expect(zoomSlot.assignedNodes()[0].querySelector("#zoom-image").srcset).toStrictEqual("focus2.png 320w");
 
     // Navigate back to first one
     zoomPrev.dispatchEvent(event);
 
-    expect(zoomSlot.assignedNodes()).toHaveLength(1);
-    expect(zoomSlot.assignedNodes()[0].srcset).toStrictEqual("focus.png 320w");
+    expect(zoomSlot.assignedNodes()[0].querySelector("#zoom-image").srcset).toStrictEqual("focus.png 320w");
 
     // Try to navigate tor previous image
     zoomPrev.dispatchEvent(event);
 
-    expect(zoomSlot.assignedNodes()).toHaveLength(1);
-    expect(zoomSlot.assignedNodes()[0].srcset).toStrictEqual("focus.png 320w");
+    expect(zoomSlot.assignedNodes()[0].querySelector("#zoom-image").srcset).toStrictEqual("focus.png 320w");
 
     // Close preview
     zoomClose.dispatchEvent(event);
 
-    expect(zoomSlot.assignedNodes()).toHaveLength(0);
+    expect(zoomSlot.assignedNodes()[0].querySelector("#zoom-image").srcset).toStrictEqual("");
   });
 });

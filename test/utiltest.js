@@ -33,15 +33,20 @@ export class UtilTest {
    * Initialize photo element
    *
    * @param {*} document document
-   * @param {*} srcset srcset
+   * @param {Object} data attributes default values
+   * @param {*} data.srcset srcset
+   * @param {*} data.alt alternative text
    * @param  {...any} childs photo element childs
    */
-  static async initPhoto(document, srcset, ...childs) {
+  static async initPhoto(document, { srcset, alt } = {}, ...childs) {
     await window.customElements.whenDefined("img-photo");
 
     const imgPhoto = document.createElement("img-photo");
     if (srcset) {
       imgPhoto.srcset = srcset;
+    }
+    if (alt) {
+      imgPhoto.alt = alt;
     }
     if (childs) {
       childs.forEach((child) => imgPhoto.appendChild(child));

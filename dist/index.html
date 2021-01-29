@@ -2,7 +2,6 @@
 <html lang="fr">
   <head>
     <title>focus</title>
-    <script src="img-focus.js"></script>
     <style>
       html,
       body {
@@ -33,7 +32,7 @@
         const oldWidth = document.body.getBoundingClientRect().width;
         document.body.style.overflow = "hidden";
         const newWidth = document.body.getBoundingClientRect().width;
-        document.body.style.marginRight = (newWidth - oldWidth) + "px";
+        document.body.style.marginRight = newWidth - oldWidth + "px";
       });
       document.addEventListener("img-focus-photo-close", () => {
         document.body.style.overflow = "visible";
@@ -43,15 +42,18 @@
       for (let i = 1; i <= 100; i++) {
         const height = 200 + 100 * (i % 3);
         const imgPhoto = document.createElement("img-photo");
-        imgPhoto.srcset =
+        imgPhoto.setAttribute(
+          "srcset",
           `https://picsum.photos/seed/${i}/320/${height} 320w,` +
-          ` https://picsum.photos/seed/${i}/640/${height * 2} 640w,` +
-          ` https://picsum.photos/seed/${i}/1080/${height * 3} 1080w`;
-        imgPhoto.alt = `Picture ${i}`;
+            ` https://picsum.photos/seed/${i}/640/${height * 2} 640w,` +
+            ` https://picsum.photos/seed/${i}/1080/${height * 3} 1080w`
+        );
+        imgPhoto.setAttribute("alt", `Picture ${i}`);
         imgFocus.appendChild(imgPhoto);
       }
 
       document.querySelector("#root").appendChild(imgFocus);
     </script>
+    <script src="img-focus.js"></script>
   </body>
 </html>

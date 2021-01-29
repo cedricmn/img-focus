@@ -60,7 +60,7 @@ export class FocusElement extends HTMLElement {
   addPhoto(imgPhotoElement, previousImgPhotoElement) {
     const photo = new Photo(imgPhotoElement);
 
-    imgPhotoElement.shadowRoot.addEventListener("img-photo-select", () => this.selectPhoto(photo));
+    imgPhotoElement.shadowRoot.addEventListener("img-photo-select", () => this.openPhoto(photo));
     imgPhotoElement.shadowRoot.addEventListener("img-photo-load", () => this.layout.layout());
 
     this.insertPhoto(photo, previousImgPhotoElement);
@@ -92,12 +92,14 @@ export class FocusElement extends HTMLElement {
   }
 
   addPhotoEventListener() {
-    this.zoomElement.shadowRoot.addEventListener("img-zoom-close", () => this.hidePhoto());
+    this.zoomElement.shadowRoot.addEventListener("img-zoom-close", () => this.closePhoto());
     this.zoomElement.shadowRoot.addEventListener("img-zoom-prev", () => this.prevPhoto());
     this.zoomElement.shadowRoot.addEventListener("img-zoom-next", () => this.nextPhoto());
   }
 
-  selectPhoto(photo) {
+  openPhoto(photo) {
+    this.el.dispatchEvent(new Event("img-focus-photo-open", { bubbles: true, composed: true }));
+
     this.store.select(photo);
     this.displayPhoto(photo);
     this.zoomElement.style.display = "block";
@@ -131,7 +133,9 @@ export class FocusElement extends HTMLElement {
     figcaption.textContent = photo.imgPhoto.alt;
   }
 
-  hidePhoto() {
+  closePhoto() {
+    this.el.dispatchEvent(new Event("img-focus-photo-close", { bubbles: true, composed: true }));
+
     const figcaption = this.zoomElement.querySelector("#zoom-figcaption"),
       image = this.zoomElement.querySelector("#zoom-image");
 

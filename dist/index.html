@@ -29,6 +29,16 @@
 
     <script>
       const imgFocus = document.createElement("img-focus");
+      document.addEventListener("img-focus-photo-open", () => {
+        const oldWidth = document.body.getBoundingClientRect().width;
+        document.body.style.overflow = "hidden";
+        const newWidth = document.body.getBoundingClientRect().width;
+        document.body.style.marginRight = (newWidth - oldWidth) + "px";
+      });
+      document.addEventListener("img-focus-photo-close", () => {
+        document.body.style.overflow = "visible";
+        document.body.style.marginRight = "0";
+      });
 
       for (let i = 1; i <= 100; i++) {
         const height = 200 + 100 * (i % 3);
@@ -37,7 +47,7 @@
           `https://picsum.photos/seed/${i}/320/${height} 320w,` +
           ` https://picsum.photos/seed/${i}/640/${height * 2} 640w,` +
           ` https://picsum.photos/seed/${i}/1080/${height * 3} 1080w`;
-        imgPhoto.alt = `Picture ${i}`
+        imgPhoto.alt = `Picture ${i}`;
         imgFocus.appendChild(imgPhoto);
       }
 

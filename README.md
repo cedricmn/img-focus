@@ -7,6 +7,8 @@ A lightweight set of web components to display un-croped pictures.
 
 ## Getting started
 
+### Installation
+
 Install web components through your package manager:
 ```shell
 npm install img-focus
@@ -33,12 +35,19 @@ Add following tags with corresponding attributes:
 </img-focus>
 ```
 
-CSS custom variables may be used to configure the gallery:
+### Configuration
+
+CSS custom variables:
 
 * `--img-focus-gap`: define gap between photos (default: 0)
 * `--img-focus-lines-height`: minimum lines height (default: 200px)
 * `--img-focus-icons-color`: navigation icons color (default: #fff)
 * `--img-focus-caption-color`: caption text color (default: #fff)
+
+DOM events:
+
+* `img-focus-photo-open`: photo openned
+* `img-focus-photo-close`: current openned photo closed
 
 ## Developing
 

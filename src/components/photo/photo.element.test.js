@@ -5,7 +5,7 @@ describe("img-photo", () => {
   it("without attributes", async () => {
     expect.assertions(3);
 
-    const { imgPhoto } = await UtilTest.initPhoto(document);
+    const { imgPhoto } = await UtilTest.initPhoto(document, { append: true });
 
     expect(imgPhoto).not.toBeNull();
     expect(imgPhoto.getImg().hasAttribute("srcset")).toBeFalsy();
@@ -15,7 +15,7 @@ describe("img-photo", () => {
   it("with changing srcset attribute", async () => {
     expect.assertions(5);
 
-    const { imgPhoto } = await UtilTest.initPhoto(document, { srcset: "focus.png 320w" });
+    const { imgPhoto } = await UtilTest.initPhoto(document, { append: true, srcset: "focus.png 320w" });
 
     expect(imgPhoto).not.toBeNull();
     expect(imgPhoto.getImg().srcset).toStrictEqual("focus.png 320w");
@@ -30,7 +30,11 @@ describe("img-photo", () => {
   it("with changing alt attribute", async () => {
     expect.assertions(3);
 
-    const { imgPhoto } = await UtilTest.initPhoto(document, { alt: "Focus photo", srcset: "focus.png 320w" });
+    const { imgPhoto } = await UtilTest.initPhoto(document, {
+      alt: "Focus photo",
+      append: true,
+      srcset: "focus.png 320w",
+    });
 
     expect(imgPhoto).not.toBeNull();
     expect(imgPhoto.getImg().alt).toStrictEqual("Focus photo");
@@ -46,7 +50,11 @@ describe("img-photo", () => {
     const paragraph = document.createElement("p");
     paragraph.append("A paragraph");
 
-    const { imgPhoto, photoSlot } = await UtilTest.initPhoto(document, { srcset: "focus.png 320w" }, paragraph);
+    const { imgPhoto, photoSlot } = await UtilTest.initPhoto(
+      document,
+      { append: true, srcset: "focus.png 320w" },
+      paragraph
+    );
 
     expect(imgPhoto).not.toBeNull();
     expect(photoSlot.assignedNodes()).toHaveLength(1);
@@ -58,9 +66,9 @@ describe("img-photo navigation", () => {
   it("with keyboard", async () => {
     expect.assertions(2);
 
-    const { imgPhoto } = await UtilTest.initPhoto(document, { srcset: "focus.png 320w" }),
+    const { imgPhoto } = await UtilTest.initPhoto(document, { append: true, srcset: "focus.png 320w" }),
       eventSelectSpy = jest.fn();
-    imgPhoto.shadowRoot.addEventListener("img-photo-select", eventSelectSpy);
+    imgPhoto.addEventListener("img-photo-select", eventSelectSpy);
     imgPhoto.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Enter" }));
     // Nothing should happen for this event
     imgPhoto.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Escape" }));
@@ -72,11 +80,11 @@ describe("img-photo navigation", () => {
   it("with click", async () => {
     expect.assertions(2);
 
-    const { imgPhoto } = await UtilTest.initPhoto(document, { srcset: "focus.png 320w" }),
+    const { imgPhoto } = await UtilTest.initPhoto(document, { append: true, srcset: "focus.png 320w" }),
       clickEvent = new MouseEvent("click", { bubbles: true }),
       eventSelectSpy = jest.fn();
-    imgPhoto.shadowRoot.addEventListener("img-photo-select", eventSelectSpy);
-    imgPhoto.getImg().dispatchEvent(clickEvent);
+    imgPhoto.addEventListener("img-photo-select", eventSelectSpy);
+    imgPhoto.dispatchEvent(clickEvent);
 
     expect(imgPhoto).not.toBeNull();
     expect(eventSelectSpy).toHaveBeenCalledTimes(1);

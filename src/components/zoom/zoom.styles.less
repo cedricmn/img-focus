@@ -14,13 +14,18 @@ div#zoom {
   z-index: 10000;
 }
 
-#prev,
-#next,
-#close {
+button {
   position: absolute;
   color: @icons-color;
   padding: 1.5rem;
-  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  background-color: transparent;
+}
+
+button:disabled {
+  opacity: 0.3;
+  cursor: default;
 }
 
 #close {
@@ -37,12 +42,6 @@ div#zoom {
 #next {
   font-size: 5rem;
   right: 0;
-}
-
-#prev.disabled,
-#next.disabled {
-  opacity: 0.3;
-  cursor: default;
 }
 
 ::slotted(*) {

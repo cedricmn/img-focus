@@ -26,8 +26,6 @@ export class FocusElement extends HTMLElement {
     this.el.appendChild(focusTemplateElement);
     this.el.appendChild(focusTemplateElement.content.cloneNode(true));
 
-    this.tabIndex = 0;
-
     this.setup();
   }
 
@@ -60,8 +58,8 @@ export class FocusElement extends HTMLElement {
   addPhoto(imgPhotoElement, previousImgPhotoElement) {
     const photo = new Photo(imgPhotoElement);
 
-    imgPhotoElement.shadowRoot.addEventListener("img-photo-select", () => this.openPhoto(photo));
-    imgPhotoElement.shadowRoot.addEventListener("img-photo-load", () => this.layout.layout());
+    imgPhotoElement.addEventListener("img-photo-select", () => this.openPhoto(photo));
+    imgPhotoElement.addEventListener("img-photo-load", () => this.layout.layout());
 
     this.insertPhoto(photo, previousImgPhotoElement);
   }
@@ -92,9 +90,9 @@ export class FocusElement extends HTMLElement {
   }
 
   addPhotoEventListener() {
-    this.zoomElement.shadowRoot.addEventListener("img-zoom-close", () => this.closePhoto());
-    this.zoomElement.shadowRoot.addEventListener("img-zoom-prev", () => this.prevPhoto());
-    this.zoomElement.shadowRoot.addEventListener("img-zoom-next", () => this.nextPhoto());
+    this.zoomElement.addEventListener("img-zoom-close", () => this.closePhoto());
+    this.zoomElement.addEventListener("img-zoom-prev", () => this.prevPhoto());
+    this.zoomElement.addEventListener("img-zoom-next", () => this.nextPhoto());
   }
 
   openPhoto(photo) {

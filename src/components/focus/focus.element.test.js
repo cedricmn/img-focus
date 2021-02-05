@@ -34,7 +34,7 @@ describe("img-focus", () => {
     expect(focusSlot.assignedNodes()[0].srcset).toStrictEqual("focus.png 320w");
     expect(focusSlot.assignedNodes()[0].getImg().srcset).toStrictEqual("focus.png 320w");
 
-    focusSlot.assignedNodes()[0].getImg().dispatchEvent(event);
+    focusSlot.assignedNodes()[0].dispatchEvent(event);
 
     expect(zoomSlot.assignedNodes()).toHaveLength(1);
     expect(zoomSlot.assignedNodes()[0].querySelector("#zoom-image").srcset).toStrictEqual("focus.png 320w");
@@ -63,7 +63,7 @@ describe("img-focus", () => {
     expect(focusSlot.assignedNodes()[1].getImg().srcset).toStrictEqual("focus2.png 320w");
 
     // Open first image
-    focusSlot.assignedNodes()[0].getImg().dispatchEvent(event);
+    focusSlot.assignedNodes()[0].dispatchEvent(event);
 
     expect(zoomSlot.assignedNodes()).toHaveLength(1);
     expect(zoomSlot.assignedNodes()[0].querySelector("#zoom-image").srcset).toStrictEqual("focus.png 320w");

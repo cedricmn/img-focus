@@ -27,6 +27,8 @@ export class PhotoElement extends HTMLElement {
     this.el.appendChild(photoTemplateElement.content.cloneNode(true));
 
     this.tabIndex = 0;
+    Util.setAttribute(this, "role", "button");
+    Util.setAttribute(this, "aria-label", this.alt);
 
     this.setup();
   }
@@ -34,15 +36,16 @@ export class PhotoElement extends HTMLElement {
   setup() {
     // Keyboard navigation
     this.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        this.el.dispatchEvent(new Event("img-photo-select"));
+      if (event.key === "Enter" || event.key === " ") {
+        this.dispatchEvent(new Event("img-photo-select"));
         event.preventDefault();
       }
     });
+    this.addEventListener("click", () => this.dispatchEvent(new Event("img-photo-select")));
 
     this.img = document.createElement("img");
-    this.img.addEventListener("load", () => this.el.dispatchEvent(new Event("img-photo-load")));
-    this.img.addEventListener("click", () => this.el.dispatchEvent(new Event("img-photo-select")));
+    Util.setAttribute(this.img, "role", "none");
+    this.img.addEventListener("load", () => this.dispatchEvent(new Event("img-photo-load")));
     this.initSources();
 
     this.el.appendChild(this.img);

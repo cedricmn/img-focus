@@ -1,5 +1,10 @@
+import { Util } from "../../util/util";
 import zoomStyles from "./zoom.styles.less";
 import zoomTemplate from "./zoom.template.html";
+
+const CLOSE = "close",
+  NEXT = "next",
+  PREV = "prev";
 
 export class ZoomElement extends HTMLElement {
   constructor() {
@@ -27,6 +32,7 @@ export class ZoomElement extends HTMLElement {
     this.el.appendChild(zoomTemplateElement.content.cloneNode(true));
 
     this.tabIndex = 0;
+    Util.setAttribute(this, "role", "dialog");
 
     this.setup();
   }
@@ -34,12 +40,10 @@ export class ZoomElement extends HTMLElement {
   setup() {
     this.prevElement = this.el.querySelector("#prev");
     this.nextElement = this.el.querySelector("#next");
+    this.closeElement = this.el.querySelector("#close");
 
     this.updateState();
-
-    const CLOSE = "close",
-      NEXT = "next",
-      PREV = "prev";
+    this.addKeydownEventListener();
 
     // Close while not clicking on actions
     this.el.querySelector("#zoom").addEventListener("click", (event) => {
@@ -48,6 +52,15 @@ export class ZoomElement extends HTMLElement {
       }
     });
 
+    for (const id of [CLOSE, PREV, NEXT]) {
+      this.shadowRoot.querySelector(`#${id}`).addEventListener("click", (event) => {
+        this.sendEvent(id);
+        event.preventDefault();
+      });
+    }
+  }
+
+  addKeydownEventListener() {
     // Keyboard navigation
     this.addEventListener("keydown", (event) => {
       switch (event.key) {
@@ -62,39 +75,41 @@ export class ZoomElement extends HTMLElement {
         case "Escape":
           this.sendEvent(CLOSE);
           break;
+        case "Tab":
+          // Wrap tabbing
+          if (event.shiftKey && (this.el.activeElement === this.closeElement || this.el.activeElement === null)) {
+            if (this.hasAttribute("hasprevious")) {
+              this.prevElement.focus();
+            } else if (this.hasAttribute("hasnext")) {
+              this.nextElement.focus();
+            }
+          } else if (
+            (!event.shiftKey && this.el.activeElement === this.prevElement) ||
+            (this.el.activeElement === this.nextElement && !this.hasAttribute("hasprevious"))
+          ) {
+            this.closeElement.focus();
+          } else {
+            return;
+          }
+          break;
         default:
           return;
       }
       event.preventDefault();
     });
-
-    for (const id of [CLOSE, PREV, NEXT]) {
-      this.shadowRoot.querySelector(`#${id}`).addEventListener("click", (event) => {
-        this.sendEvent(id);
-        event.preventDefault();
-      });
-    }
   }
 
   updateState() {
     if (this.prevElement) {
-      ZoomElement.disable(this.prevElement, !this.hasAttribute("hasprevious"));
+      Util.setBooleanAttribute(this.prevElement, "disabled", !this.hasAttribute("hasprevious"));
     }
     if (this.nextElement) {
-      ZoomElement.disable(this.nextElement, !this.hasAttribute("hasnext"));
-    }
-  }
-
-  static disable(element, disabled) {
-    if (disabled) {
-      element.classList.add("disabled");
-    } else {
-      element.classList.remove("disabled");
+      Util.setBooleanAttribute(this.nextElement, "disabled", !this.hasAttribute("hasnext"));
     }
   }
 
   sendEvent(id) {
-    this.el.dispatchEvent(new Event(`img-zoom-${id}`));
+    this.dispatchEvent(new Event(`img-zoom-${id}`));
   }
 
   get hasprevious() {

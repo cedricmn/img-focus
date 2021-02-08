@@ -1,12 +1,11 @@
 {
   "parserOptions": {
-    "ecmaVersion": 8,
     "sourceType": "module"
   },
   "extends": ["eslint:all", "plugin:jest/all", "plugin:jest-formatting/strict"],
   "env": {
     "browser": true,
-    "es6": true
+    "es2017": true
   },
   "ignorePatterns": ["*.config.js", "dist/**"],
   "rules": {

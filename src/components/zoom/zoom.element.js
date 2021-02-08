@@ -46,6 +46,11 @@ export class ZoomElement extends HTMLElement {
     this.updateState();
     this.addKeydownEventListener();
 
+    // Default focus on close
+    this.addEventListener("focus", () => {
+      this.closeElement.focus();
+    });
+
     // Close while not clicking on actions
     this.el.querySelector("#zoom").addEventListener("click", (event) => {
       if (![CLOSE, PREV, NEXT].includes(event.target.id)) {

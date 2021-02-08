@@ -171,7 +171,9 @@ describe("img-zoom accessibility", () => {
       eventFocusNextSpy = jest.fn(),
       eventFocusPrevSpy = jest.fn(),
       eventShiftTab = new KeyboardEvent("keydown", { bubbles: true, key: "Tab", shiftKey: true }),
-      eventTab = new KeyboardEvent("keydown", { bubbles: true, key: "Tab" });
+      eventShiftTabSpy = jest.spyOn(eventShiftTab, "preventDefault"),
+      eventTab = new KeyboardEvent("keydown", { bubbles: true, key: "Tab" }),
+      eventTabSpy = jest.spyOn(eventTab, "preventDefault");
 
     zoomPrev.focus();
     zoomNext.addEventListener("focus", eventFocusNextSpy);
@@ -179,22 +181,20 @@ describe("img-zoom accessibility", () => {
     zoomClose.addEventListener("focus", eventFocusCloseSpy);
 
     // Previous to close
-    const eventPreventDefaultTab = jest.spyOn(eventTab, "preventDefault");
     imgZoom.dispatchEvent(eventTab);
 
     expect(eventFocusCloseSpy).toHaveBeenCalledTimes(1);
     expect(eventFocusNextSpy).toHaveBeenCalledTimes(0);
     expect(eventFocusPrevSpy).toHaveBeenCalledTimes(0);
-    expect(eventPreventDefaultTab).toHaveBeenCalledTimes(1);
+    expect(eventTabSpy).toHaveBeenCalledTimes(1);
 
     // Close to previous
-    const eventPreventDefaultShiftTab = jest.spyOn(eventShiftTab, "preventDefault");
     imgZoom.dispatchEvent(eventShiftTab);
 
     expect(eventFocusCloseSpy).toHaveBeenCalledTimes(1);
     expect(eventFocusNextSpy).toHaveBeenCalledTimes(0);
     expect(eventFocusPrevSpy).toHaveBeenCalledTimes(1);
-    expect(eventPreventDefaultShiftTab).toHaveBeenCalledTimes(1);
+    expect(eventShiftTabSpy).toHaveBeenCalledTimes(1);
   });
 
   it("with next item", async () => {
@@ -208,7 +208,9 @@ describe("img-zoom accessibility", () => {
       eventFocusNextSpy = jest.fn(),
       eventFocusPrevSpy = jest.fn(),
       eventShiftTab = new KeyboardEvent("keydown", { bubbles: true, key: "Tab", shiftKey: true }),
-      eventTab = new KeyboardEvent("keydown", { bubbles: true, key: "Tab" });
+      eventShiftTabSpy = jest.spyOn(eventShiftTab, "preventDefault"),
+      eventTab = new KeyboardEvent("keydown", { bubbles: true, key: "Tab" }),
+      eventTabSpy = jest.spyOn(eventTab, "preventDefault");
 
     zoomNext.focus();
     zoomClose.addEventListener("focus", eventFocusCloseSpy);
@@ -216,22 +218,20 @@ describe("img-zoom accessibility", () => {
     zoomPrev.addEventListener("focus", eventFocusPrevSpy);
 
     // Next to close
-    const eventPreventDefaultTab = jest.spyOn(eventTab, "preventDefault");
     imgZoom.dispatchEvent(eventTab);
 
     expect(eventFocusCloseSpy).toHaveBeenCalledTimes(1);
     expect(eventFocusNextSpy).toHaveBeenCalledTimes(0);
     expect(eventFocusPrevSpy).toHaveBeenCalledTimes(0);
-    expect(eventPreventDefaultTab).toHaveBeenCalledTimes(1);
+    expect(eventTabSpy).toHaveBeenCalledTimes(1);
 
     // Close to next
-    const eventPreventDefaultShiftTab = jest.spyOn(eventShiftTab, "preventDefault");
     imgZoom.dispatchEvent(eventShiftTab);
 
     expect(eventFocusCloseSpy).toHaveBeenCalledTimes(1);
     expect(eventFocusNextSpy).toHaveBeenCalledTimes(1);
     expect(eventFocusPrevSpy).toHaveBeenCalledTimes(0);
-    expect(eventPreventDefaultShiftTab).toHaveBeenCalledTimes(1);
+    expect(eventShiftTabSpy).toHaveBeenCalledTimes(1);
   });
 
   it("with previous and next item", async () => {
@@ -245,7 +245,8 @@ describe("img-zoom accessibility", () => {
       eventFocusCloseSpy = jest.fn(),
       eventFocusNextSpy = jest.fn(),
       eventFocusPrevSpy = jest.fn(),
-      eventTab = new KeyboardEvent("keydown", { bubbles: true, key: "Tab" });
+      eventTab = new KeyboardEvent("keydown", { bubbles: true, key: "Tab" }),
+      eventTabSpy = jest.spyOn(eventTab, "preventDefault");
 
     zoomNext.focus();
     zoomClose.addEventListener("focus", eventFocusCloseSpy);
@@ -253,13 +254,12 @@ describe("img-zoom accessibility", () => {
     zoomPrev.addEventListener("focus", eventFocusPrevSpy);
 
     // Next to previous should not trigger focus nor prevent default
-    const eventPreventDefaultTab = jest.spyOn(eventTab, "preventDefault");
     imgZoom.dispatchEvent(eventTab);
 
     expect(eventFocusCloseSpy).toHaveBeenCalledTimes(0);
     expect(eventFocusNextSpy).toHaveBeenCalledTimes(0);
-    expect(eventFocusPrevSpy).toHaveBeenCalledTimes(0);
-    expect(eventPreventDefaultTab).toHaveBeenCalledTimes(0);
+    expect(eventFocusPrevSpy).toHaveBeenCalledTimes(1);
+    expect(eventTabSpy).toHaveBeenCalledTimes(1);
   });
 
   it("without previous and next", async () => {
@@ -269,19 +269,19 @@ describe("img-zoom accessibility", () => {
       eventFocusCloseSpy = jest.fn(),
       eventFocusNextSpy = jest.fn(),
       eventFocusPrevSpy = jest.fn(),
-      eventShiftTab = new KeyboardEvent("keydown", { bubbles: true, key: "Tab", shiftKey: true });
+      eventShiftTab = new KeyboardEvent("keydown", { bubbles: true, key: "Tab", shiftKey: true }),
+      eventShiftTabSpy = jest.spyOn(eventShiftTab, "preventDefault");
 
     zoomClose.addEventListener("focus", eventFocusCloseSpy);
     zoomNext.addEventListener("focus", eventFocusNextSpy);
     zoomPrev.addEventListener("focus", eventFocusPrevSpy);
 
     // Close should stay focus by preventing default
-    const eventPreventDefaultShiftTab = jest.spyOn(eventShiftTab, "preventDefault");
     imgZoom.dispatchEvent(eventShiftTab);
 
     expect(eventFocusCloseSpy).toHaveBeenCalledTimes(0);
     expect(eventFocusNextSpy).toHaveBeenCalledTimes(0);
     expect(eventFocusPrevSpy).toHaveBeenCalledTimes(0);
-    expect(eventPreventDefaultShiftTab).toHaveBeenCalledTimes(1);
+    expect(eventShiftTabSpy).toHaveBeenCalledTimes(1);
   });
 });

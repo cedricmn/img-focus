@@ -38,9 +38,10 @@ export class ZoomElement extends HTMLElement {
   }
 
   setup() {
-    this.prevElement = this.el.querySelector("#prev");
-    this.nextElement = this.el.querySelector("#next");
-    this.closeElement = this.el.querySelector("#close");
+    this.prevElement = this.el.querySelector(`#${PREV}`);
+    this.nextElement = this.el.querySelector(`#${NEXT}`);
+    this.closeElement = this.el.querySelector(`#${CLOSE}`);
+    this.actions = [this.closeElement, this.nextElement, this.prevElement];
 
     this.updateState();
     this.addKeydownEventListener();
@@ -75,23 +76,17 @@ export class ZoomElement extends HTMLElement {
         case "Escape":
           this.sendEvent(CLOSE);
           break;
-        case "Tab":
+        case "Tab": {
           // Wrap tabbing
-          if (event.shiftKey && (this.el.activeElement === this.closeElement || this.el.activeElement === null)) {
-            if (this.hasAttribute("hasprevious")) {
-              this.prevElement.focus();
-            } else if (this.hasAttribute("hasnext")) {
-              this.nextElement.focus();
+          let activeActions = this.actions.filter((action) => !action.disabled);
+          if (activeActions.length > 1) {
+            if (event.shiftKey) {
+              activeActions = activeActions.reverse();
             }
-          } else if (
-            (!event.shiftKey && this.el.activeElement === this.prevElement) ||
-            (this.el.activeElement === this.nextElement && !this.hasAttribute("hasprevious"))
-          ) {
-            this.closeElement.focus();
-          } else {
-            return;
+            activeActions[(activeActions.indexOf(this.el.activeElement) + 1) % activeActions.length].focus();
           }
           break;
+        }
         default:
           return;
       }

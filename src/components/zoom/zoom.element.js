@@ -31,8 +31,9 @@ export class ZoomElement extends HTMLElement {
     this.el.appendChild(zoomTemplateElement);
     this.el.appendChild(zoomTemplateElement.content.cloneNode(true));
 
-    this.tabIndex = 0;
+    this.tabIndex = -1;
     Util.setAttribute(this, "role", "dialog");
+    Util.setAttribute(this, "aria-label", "Display photo");
 
     this.setup();
   }

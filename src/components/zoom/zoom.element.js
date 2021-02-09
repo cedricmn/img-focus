@@ -48,7 +48,9 @@ export class ZoomElement extends HTMLElement {
 
     // Default focus on close
     this.addEventListener("focus", () => {
-      this.closeElement.focus();
+      if (!this.el.activeElement) {
+        this.closeElement.focus();
+      }
     });
 
     // Close while not clicking on actions

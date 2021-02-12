@@ -57,11 +57,16 @@ export class FocusElement extends HTMLElement {
 
   addPhoto(imgPhotoElement, previousImgPhotoElement) {
     const photo = new Photo(imgPhotoElement);
+    this.insertPhoto(photo, previousImgPhotoElement);
 
     imgPhotoElement.addEventListener("img-photo-select", () => this.openPhoto(photo));
-    imgPhotoElement.addEventListener("img-photo-load", () => this.layout.layout());
-
-    this.insertPhoto(photo, previousImgPhotoElement);
+    if (!imgPhotoElement.hasAttribute("width") || !imgPhotoElement.hasAttribute("height")) {
+      // Need to wait for photo to load before doing layout
+      imgPhotoElement.addEventListener("img-photo-load", () => this.layout.layout());
+    } else {
+      // Direct layout
+      this.layout.layout();
+    }
   }
 
   insertPhoto(photo, previousImgPhotoElement) {
@@ -126,7 +131,7 @@ export class FocusElement extends HTMLElement {
     Util.setBooleanAttribute(this.zoomElement, "hasnext", this.store.hasNext(photo));
     Util.copyAttribute(photo.imgPhoto, image, "alt");
     Util.copyAttribute(photo.imgPhoto, image, "srcset");
-    Util.setAttribute(image, "size", "100vw");
+    Util.setAttribute(image, "sizes", "100vw");
 
     figcaption.textContent = photo.imgPhoto.alt;
   }
@@ -140,7 +145,7 @@ export class FocusElement extends HTMLElement {
     this.zoomElement.style.display = "none";
     image.alt = "";
     image.srcset = "";
-    image.size = "";
+    image.sizes = "";
     figcaption.textContent = "";
 
     // Focus last openned photo

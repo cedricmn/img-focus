@@ -2,6 +2,7 @@
 <html lang="fr">
   <head>
     <title>focus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       html,
       body {
@@ -46,9 +47,11 @@
           "srcset",
           `https://picsum.photos/seed/${i}/320/${height} 320w,` +
             ` https://picsum.photos/seed/${i}/640/${height * 2} 640w,` +
-            ` https://picsum.photos/seed/${i}/1080/${height * 3} 1080w`
+            ` https://picsum.photos/seed/${i}/1280/${height * 4} 1280w`
         );
-        imgPhoto.setAttribute("alt", `Picture ${i}`);
+        imgPhoto.setAttribute("width", 1280);
+        imgPhoto.setAttribute("height", height * 4);
+        imgPhoto.setAttribute("alt", `Photo ${i}`);
         imgFocus.appendChild(imgPhoto);
       }
 

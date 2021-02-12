@@ -34,16 +34,28 @@ export class UtilTest {
    * @param {*} document document
    * @param {Object} options initialization options
    * @param {*} options.append append to document
+   * @param {*} options.height intrinsic photo height
    * @param {*} options.srcset srcset
+   * @param {*} options.sizes sizes
+   * @param {*} options.width intrinsic photo width
    * @param {*} options.alt alternative text
    * @param  {...any} childs photo element childs
    */
-  static async initPhoto(document, { append, srcset, alt } = { append: false }, ...childs) {
+  static async initPhoto(document, { append, height, srcset, sizes, width, alt } = { append: false }, ...childs) {
     await window.customElements.whenDefined("img-photo");
 
     const imgPhoto = document.createElement("img-photo");
+    if (height) {
+      imgPhoto.height = height;
+    }
     if (srcset) {
       imgPhoto.srcset = srcset;
+    }
+    if (sizes) {
+      imgPhoto.sizes = sizes;
+    }
+    if (width) {
+      imgPhoto.width = width;
     }
     if (alt) {
       imgPhoto.alt = alt;

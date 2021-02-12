@@ -26,6 +26,26 @@ describe("img-focus layout triggering", () => {
     expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
   });
 
+  it("should layout when photo ready", async () => {
+    expect.assertions(4);
+
+    const { imgFocus } = await UtilTest.initFocus(document),
+      layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal"),
+      resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(0);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(0);
+
+    // Trigger layout by slotting photo
+    const { imgPhoto } = await UtilTest.initPhoto(document, { height: 100, srcset: "focus.png 320w", width: 200 });
+    await imgFocus.appendChild(imgPhoto);
+
+    jest.runAllTimers();
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(1);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
+  });
+
   it("should layout while resizing", async () => {
     expect.assertions(4);
 

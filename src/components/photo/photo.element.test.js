@@ -9,7 +9,7 @@ describe("img-photo", () => {
 
     expect(imgPhoto).not.toBeNull();
     expect(imgPhoto.getImg().hasAttribute("srcset")).toBeFalsy();
-    expect(imgPhoto.getImg().hasAttribute("sizes")).toBeFalsy();
+    expect(imgPhoto.getImg().sizes).toStrictEqual("(min-width: 50em) 15vw, 100vw");
   });
 
   it("with changing srcset attribute", async () => {
@@ -19,12 +19,56 @@ describe("img-photo", () => {
 
     expect(imgPhoto).not.toBeNull();
     expect(imgPhoto.getImg().srcset).toStrictEqual("focus.png 320w");
-    expect(imgPhoto.getImg().sizes).toStrictEqual("(min-width: 320px) 640px");
+    expect(imgPhoto.getImg().sizes).toStrictEqual("(min-width: 50em) 15vw, 100vw");
 
     imgPhoto.srcset = "focus2.png 320w";
 
     expect(imgPhoto.getImg().srcset).toStrictEqual("focus2.png 320w");
-    expect(imgPhoto.getImg().sizes).toStrictEqual("(min-width: 320px) 640px");
+    expect(imgPhoto.getImg().sizes).toStrictEqual("(min-width: 50em) 15vw, 100vw");
+  });
+
+  it("with changing sizes attribute", async () => {
+    expect.assertions(5);
+
+    const { imgPhoto } = await UtilTest.initPhoto(document, {
+      append: true,
+      sizes: "(min-width: 50em) 20vw, 100vw",
+      srcset: "focus.png 320w",
+    });
+
+    expect(imgPhoto).not.toBeNull();
+    expect(imgPhoto.sizes).toStrictEqual("(min-width: 50em) 20vw, 100vw");
+    expect(imgPhoto.getImg().sizes).toStrictEqual("(min-width: 50em) 20vw, 100vw");
+
+    imgPhoto.sizes = "100vw";
+
+    expect(imgPhoto.sizes).toStrictEqual("100vw");
+    expect(imgPhoto.getImg().sizes).toStrictEqual("100vw");
+  });
+
+  it("with changing width and height attributes", async () => {
+    expect.assertions(9);
+
+    const { imgPhoto } = await UtilTest.initPhoto(document, {
+      append: true,
+      height: 100,
+      srcset: "focus.png 320w",
+      width: 200,
+    });
+
+    expect(imgPhoto).not.toBeNull();
+    expect(imgPhoto.height).toStrictEqual("100");
+    expect(imgPhoto.getImg().height).toStrictEqual(100);
+    expect(imgPhoto.width).toStrictEqual("200");
+    expect(imgPhoto.getImg().width).toStrictEqual(200);
+
+    imgPhoto.height = 150;
+    imgPhoto.width = 300;
+
+    expect(imgPhoto.height).toStrictEqual("150");
+    expect(imgPhoto.getImg().height).toStrictEqual(150);
+    expect(imgPhoto.width).toStrictEqual("300");
+    expect(imgPhoto.getImg().width).toStrictEqual(300);
   });
 
   it("with changing alt attribute", async () => {

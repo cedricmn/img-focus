@@ -1,5 +1,5 @@
-const FIREFOX_HEIGHT_MARGIN = 0.01,
-  LAYOUT_DEBOUNCE_TIME = 200;
+const LAYOUT_DEBOUNCE_TIME = 200,
+  SIZE_MARGIN = 0.01;
 
 /**
  * Layout focus
@@ -57,7 +57,7 @@ export class FocusElementLayout {
     // Reset styles to let do flexbox layout
     this.focus.getFocusElement().classList.remove("noflex");
     this.focus.getStore().photos.forEach((photo) => {
-      photo.imgPhoto.clearHeight();
+      photo.imgPhoto.clearSize();
     });
   }
 
@@ -81,7 +81,8 @@ export class FocusElementLayout {
       }
 
       linesPhotos[linesPhotos.length - 1].push(photo);
-      linesPhotosWidth[linesPhotosWidth.length - 1] += photo.getImgBounding().width;
+      // Get normalized image width to avoid bad layout
+      linesPhotosWidth[linesPhotosWidth.length - 1] += photo.getImageWidth();
       linesWidth[linesWidth.length - 1] += this.getCorrectedWidth(photo);
 
       previousOffsetLeft = photo.getImgBounding().left;
@@ -134,8 +135,14 @@ export class FocusElementLayout {
       // No flex for last photos line to avoid big photos on last line
       if (index !== arr.length - 1) {
         linePhotos.forEach((linePhoto) => {
-          // Firefox need some margin to avoid bad layout
-          linePhoto.imgPhoto.setHeight(`${newLineHeight[index] - FIREFOX_HEIGHT_MARGIN}px`);
+          if (linePhoto.imgPhoto.width && linePhoto.imgPhoto.height) {
+            // Force width to avoid bad layout if inaccurate width and height provided
+            const width = (linePhoto.imgPhoto.width * newLineHeight[index]) / linePhoto.imgPhoto.height;
+            linePhoto.imgPhoto.setWidth(`${width - SIZE_MARGIN}px`);
+          }
+
+          // Need some margin to avoid bad layout
+          linePhoto.imgPhoto.setHeight(`${newLineHeight[index] - SIZE_MARGIN}px`);
         });
       }
     });

@@ -280,3 +280,90 @@ describe("img-focus layout calculation", () => {
     expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("");
   });
 });
+
+describe("img-focus layout calculation with provided width and height", () => {
+  it("should layout with accurate provided width and height", async () => {
+    expect.assertions(6);
+
+    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+        document,
+        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus.png 320w", width: 100 })).imgPhoto,
+        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus2.png 320w", width: 100 })).imgPhoto,
+        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 100 })).imgPhoto
+      ),
+      getCorrectedWidthSpy = jest.spyOn(imgFocus.layout, "getCorrectedWidth"),
+      layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal");
+
+    jest.spyOn(imgFocus, "getFocusElementBounding").mockImplementation(() => ({ width: 200 }));
+
+    imgFocus.getStore().photos.forEach((photo, index) => {
+      const shift = 205 * index;
+      jest.spyOn(photo, "getBounding").mockImplementation(() => ({
+        left: 0,
+        right: 200,
+      }));
+      jest.spyOn(photo, "getImgBounding").mockImplementation(() => ({
+        bottom: 200 + shift,
+        height: 200,
+        left: 50,
+        right: 150,
+        top: shift,
+        width: 100,
+      }));
+    });
+
+    jest.runAllTimers();
+
+    expect(getCorrectedWidthSpy).toHaveBeenCalledTimes(3);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
+
+    expect(focusSlot.style.height).toBe("1010px");
+    expect(focusSlot.assignedNodes()[0].getImg().style.height).toBe("399.99px");
+    expect(focusSlot.assignedNodes()[1].getImg().style.height).toBe("399.99px");
+    expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("");
+  });
+
+  it("should layout with inaccurate provided width and height", async () => {
+    expect.assertions(7);
+
+    // With width of 50, 100, 160 instead of 100
+    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+        document,
+        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus.png 320w", width: 50 })).imgPhoto,
+        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus2.png 320w", width: 100 })).imgPhoto,
+        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 160 })).imgPhoto,
+        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 100 })).imgPhoto
+      ),
+      getCorrectedWidthSpy = jest.spyOn(imgFocus.layout, "getCorrectedWidth"),
+      layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal");
+
+    jest.spyOn(imgFocus, "getFocusElementBounding").mockImplementation(() => ({ width: 200 }));
+
+    imgFocus.getStore().photos.forEach((photo, index) => {
+      const shift = 205 * index;
+      jest.spyOn(photo, "getBounding").mockImplementation(() => ({
+        left: 0,
+        right: 200,
+      }));
+      jest.spyOn(photo, "getImgBounding").mockImplementation(() => ({
+        bottom: 200 + shift,
+        height: 200,
+        left: 50,
+        right: 150,
+        top: shift,
+        width: 100,
+      }));
+    });
+
+    jest.runAllTimers();
+
+    expect(getCorrectedWidthSpy).toHaveBeenCalledTimes(4);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
+
+    expect(focusSlot.style.height).toBe("1665px");
+    expect(focusSlot.assignedNodes()[0].getImg().style.height).toBe("799.99px");
+    expect(focusSlot.assignedNodes()[1].getImg().style.height).toBe("399.99px");
+    expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("249.99px");
+    expect(focusSlot.assignedNodes()[3].getImg().style.height).toBe("");
+  });
+});

@@ -69,14 +69,17 @@ export class PhotoElement extends HTMLElement {
     }
   }
 
-  clearHeight() {
+  clearSize() {
+    this.img.style.width = "";
     this.img.style.height = "";
-    this.img.classList.remove("transition");
+  }
+
+  setWidth(width) {
+    this.img.style.width = width;
   }
 
   setHeight(height) {
     this.img.style.height = height;
-    this.img.classList.add("transition");
   }
 
   getImg() {

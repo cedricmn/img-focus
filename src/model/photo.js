@@ -28,4 +28,15 @@ export class Photo {
   getBounding() {
     return this.imgPhotoInner.getBoundingClientRect();
   }
+
+  /**
+   * Get normalized image width
+   */
+  getImageWidth() {
+    if (this.imgPhoto.width && this.imgPhoto.height) {
+      // Normalize to have consistent layout before and after image load
+      return (this.imgPhoto.width * this.getImgBounding().height) / this.imgPhoto.height;
+    }
+    return this.getImgBounding().width;
+  }
 }

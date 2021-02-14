@@ -75,8 +75,7 @@
         "max-lines-per-function": ["error", 150],
         "one-var": ["error", "consecutive"],
         "no-new": "off",
-        "max-statements": ["error", 30],
-        "max-lines": ["error", 400]
+        "max-statements": ["error", 30]
       }
     }
   ]

@@ -1,4 +1,5 @@
-const LAYOUT_DEBOUNCE_TIME = 200,
+const HEIGHT_TRIGGER = 50,
+  LAYOUT_DEBOUNCE_TIME = 200,
   SIZE_MARGIN = 0.01;
 
 /**
@@ -114,11 +115,18 @@ export class FocusElementLayout {
    * @param {*} data.gap grid gap
    */
   updateHeight({ newLineHeight, lineHeight, gap }) {
-    const totalHeight = newLineHeight
-      .slice(0, -1)
-      .reduce((accumulator, value) => accumulator + value + gap, lineHeight);
+    const heightBefore = this.focus.getFocusElementBounding().height,
+      newHeight = newLineHeight.slice(0, -1).reduce((accumulator, value) => accumulator + value + gap, lineHeight);
 
-    this.focus.getFocusElement().style.height = `${totalHeight}px`;
+    /*
+     * Grow focus height to force scrollbar display if needed. Reduce height only
+     * if height reduction above height trigger to avoid inifinte loop. Infinite loop
+     * can occurs when scrollbar disapear after height reduction and appear back
+     * after next layout.
+     */
+    if (!heightBefore || newHeight > heightBefore || heightBefore - newHeight > HEIGHT_TRIGGER) {
+      this.focus.getFocusElement().style.height = `${newHeight}px`;
+    }
   }
 
   /**

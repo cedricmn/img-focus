@@ -1,3 +1,6 @@
+/**
+ * @file Zoom element tests.
+ */
 import "../../index.js";
 import { UtilTest } from "../../../test/utiltest.js";
 
@@ -42,37 +45,37 @@ describe("img-zoom", () => {
   it("with changing hasprevious attribute", async () => {
     expect.assertions(5);
 
-    const { zoomSlot, imgZoom, zoomPrev } = await UtilTest.initZoom(document, { append: true, hasPrevious: true });
+    const { zoomSlot, zoomElement, zoomPrev } = await UtilTest.initZoom(document, { append: true, hasPrevious: true });
 
     expect(zoomSlot).not.toBeNull();
     expect(zoomPrev.disabled).toBeFalsy();
 
-    imgZoom.removeAttribute("hasprevious");
+    zoomElement.removeAttribute("hasprevious");
 
     expect(zoomPrev.disabled).toBeTruthy();
 
-    imgZoom.hasprevious = "";
+    zoomElement.hasprevious = "";
 
     expect(zoomPrev.disabled).toBeFalsy();
-    expect(imgZoom.hasprevious).toStrictEqual("");
+    expect(zoomElement.hasprevious).toStrictEqual("");
   });
 
   it("with changing hasnext attribute", async () => {
     expect.assertions(5);
 
-    const { zoomSlot, imgZoom, zoomNext } = await UtilTest.initZoom(document, { append: true, hasNext: true });
+    const { zoomSlot, zoomElement, zoomNext } = await UtilTest.initZoom(document, { append: true, hasNext: true });
 
     expect(zoomSlot).not.toBeNull();
     expect(zoomNext.disabled).toBeFalsy();
 
-    imgZoom.removeAttribute("hasnext");
+    zoomElement.removeAttribute("hasnext");
 
     expect(zoomNext.disabled).toBeTruthy();
 
-    imgZoom.hasnext = "";
+    zoomElement.hasnext = "";
 
     expect(zoomNext.disabled).toBeFalsy();
-    expect(imgZoom.hasnext).toStrictEqual("");
+    expect(zoomElement.hasnext).toStrictEqual("");
   });
 
   it("with default hasprevious and hasnext attributes", async () => {
@@ -90,21 +93,21 @@ describe("img-zoom navigation", () => {
   it("with keyboard", async () => {
     expect.assertions(4);
 
-    const { zoomSlot, imgZoom } = await UtilTest.initZoom(document, { append: true }),
+    const { zoomSlot, zoomElement } = await UtilTest.initZoom(document, { append: true }),
       eventCloseSpy = jest.fn(),
       eventNextSpy = jest.fn(),
       eventPrevSpy = jest.fn();
 
-    imgZoom.addEventListener("img-zoom-prev", eventPrevSpy);
-    imgZoom.addEventListener("img-zoom-next", eventNextSpy);
-    imgZoom.addEventListener("img-zoom-close", eventCloseSpy);
-    imgZoom.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "ArrowUp" }));
-    imgZoom.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "ArrowLeft" }));
-    imgZoom.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "ArrowDown" }));
-    imgZoom.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "ArrowRight" }));
-    imgZoom.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Escape" }));
+    zoomElement.addEventListener("img-zoom-prev", eventPrevSpy);
+    zoomElement.addEventListener("img-zoom-next", eventNextSpy);
+    zoomElement.addEventListener("img-zoom-close", eventCloseSpy);
+    zoomElement.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "ArrowUp" }));
+    zoomElement.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "ArrowLeft" }));
+    zoomElement.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "ArrowDown" }));
+    zoomElement.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "ArrowRight" }));
+    zoomElement.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Escape" }));
     // Nothing should happen for this event
-    imgZoom.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Enter" }));
+    zoomElement.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Enter" }));
 
     expect(zoomSlot).not.toBeNull();
     expect(eventPrevSpy).toHaveBeenCalledTimes(2);
@@ -115,15 +118,17 @@ describe("img-zoom navigation", () => {
   it("with actions", async () => {
     expect.assertions(4);
 
-    const { zoomSlot, imgZoom, zoomClose, zoomNext, zoomPrev } = await UtilTest.initZoom(document, { append: true }),
+    const { zoomSlot, zoomElement, zoomClose, zoomNext, zoomPrev } = await UtilTest.initZoom(document, {
+        append: true,
+      }),
       clickEvent = new MouseEvent("click", { bubbles: true }),
       eventCloseSpy = jest.fn(),
       eventNextSpy = jest.fn(),
       eventPrevSpy = jest.fn();
 
-    imgZoom.addEventListener("img-zoom-prev", eventPrevSpy);
-    imgZoom.addEventListener("img-zoom-next", eventNextSpy);
-    imgZoom.addEventListener("img-zoom-close", eventCloseSpy);
+    zoomElement.addEventListener("img-zoom-prev", eventPrevSpy);
+    zoomElement.addEventListener("img-zoom-next", eventNextSpy);
+    zoomElement.addEventListener("img-zoom-close", eventCloseSpy);
     zoomClose.dispatchEvent(clickEvent);
     zoomNext.dispatchEvent(clickEvent);
     zoomPrev.dispatchEvent(clickEvent);
@@ -145,10 +150,10 @@ describe("img-zoom navigation", () => {
     img.srcset = "focus.png 320w";
     img.size = "100vw";
 
-    const { zoomSlot, imgZoom } = await UtilTest.initZoom(document, { append: true }, img);
-    imgZoom.addEventListener("img-zoom-prev", eventPrevSpy);
-    imgZoom.addEventListener("img-zoom-next", eventNextSpy);
-    imgZoom.addEventListener("img-zoom-close", eventCloseSpy);
+    const { zoomSlot, zoomElement } = await UtilTest.initZoom(document, { append: true }, img);
+    zoomElement.addEventListener("img-zoom-prev", eventPrevSpy);
+    zoomElement.addEventListener("img-zoom-next", eventNextSpy);
+    zoomElement.addEventListener("img-zoom-close", eventCloseSpy);
     img.dispatchEvent(clickEvent);
     zoomSlot.dispatchEvent(clickEvent);
 
@@ -163,7 +168,7 @@ describe("img-zoom accessibility", () => {
   it("with previous item", async () => {
     expect.assertions(8);
 
-    const { imgZoom, zoomClose, zoomNext, zoomPrev } = await UtilTest.initZoom(document, {
+    const { zoomElement, zoomClose, zoomNext, zoomPrev } = await UtilTest.initZoom(document, {
         append: true,
         hasPrevious: true,
       }),
@@ -181,7 +186,7 @@ describe("img-zoom accessibility", () => {
     zoomClose.addEventListener("focus", eventFocusCloseSpy);
 
     // Previous to close
-    imgZoom.dispatchEvent(eventTab);
+    zoomElement.dispatchEvent(eventTab);
 
     expect(eventFocusCloseSpy).toHaveBeenCalledTimes(1);
     expect(eventFocusNextSpy).toHaveBeenCalledTimes(0);
@@ -189,7 +194,7 @@ describe("img-zoom accessibility", () => {
     expect(eventTabSpy).toHaveBeenCalledTimes(1);
 
     // Close to previous
-    imgZoom.dispatchEvent(eventShiftTab);
+    zoomElement.dispatchEvent(eventShiftTab);
 
     expect(eventFocusCloseSpy).toHaveBeenCalledTimes(1);
     expect(eventFocusNextSpy).toHaveBeenCalledTimes(0);
@@ -200,7 +205,7 @@ describe("img-zoom accessibility", () => {
   it("with next item", async () => {
     expect.assertions(8);
 
-    const { imgZoom, zoomClose, zoomNext, zoomPrev } = await UtilTest.initZoom(document, {
+    const { zoomElement, zoomClose, zoomNext, zoomPrev } = await UtilTest.initZoom(document, {
         append: true,
         hasNext: true,
       }),
@@ -218,7 +223,7 @@ describe("img-zoom accessibility", () => {
     zoomPrev.addEventListener("focus", eventFocusPrevSpy);
 
     // Next to close
-    imgZoom.dispatchEvent(eventTab);
+    zoomElement.dispatchEvent(eventTab);
 
     expect(eventFocusCloseSpy).toHaveBeenCalledTimes(1);
     expect(eventFocusNextSpy).toHaveBeenCalledTimes(0);
@@ -226,7 +231,7 @@ describe("img-zoom accessibility", () => {
     expect(eventTabSpy).toHaveBeenCalledTimes(1);
 
     // Close to next
-    imgZoom.dispatchEvent(eventShiftTab);
+    zoomElement.dispatchEvent(eventShiftTab);
 
     expect(eventFocusCloseSpy).toHaveBeenCalledTimes(1);
     expect(eventFocusNextSpy).toHaveBeenCalledTimes(1);
@@ -237,7 +242,7 @@ describe("img-zoom accessibility", () => {
   it("with previous and next item", async () => {
     expect.assertions(4);
 
-    const { imgZoom, zoomClose, zoomNext, zoomPrev } = await UtilTest.initZoom(document, {
+    const { zoomElement, zoomClose, zoomNext, zoomPrev } = await UtilTest.initZoom(document, {
         append: true,
         hasNext: true,
         hasPrevious: true,
@@ -254,7 +259,7 @@ describe("img-zoom accessibility", () => {
     zoomPrev.addEventListener("focus", eventFocusPrevSpy);
 
     // Next to previous should not trigger focus nor prevent default
-    imgZoom.dispatchEvent(eventTab);
+    zoomElement.dispatchEvent(eventTab);
 
     expect(eventFocusCloseSpy).toHaveBeenCalledTimes(0);
     expect(eventFocusNextSpy).toHaveBeenCalledTimes(0);
@@ -265,7 +270,7 @@ describe("img-zoom accessibility", () => {
   it("without previous and next", async () => {
     expect.assertions(4);
 
-    const { imgZoom, zoomClose, zoomNext, zoomPrev } = await UtilTest.initZoom(document, { append: true }),
+    const { zoomElement, zoomClose, zoomNext, zoomPrev } = await UtilTest.initZoom(document, { append: true }),
       eventFocusCloseSpy = jest.fn(),
       eventFocusNextSpy = jest.fn(),
       eventFocusPrevSpy = jest.fn(),
@@ -277,7 +282,7 @@ describe("img-zoom accessibility", () => {
     zoomPrev.addEventListener("focus", eventFocusPrevSpy);
 
     // Close should stay focus by preventing default
-    imgZoom.dispatchEvent(eventShiftTab);
+    zoomElement.dispatchEvent(eventShiftTab);
 
     expect(eventFocusCloseSpy).toHaveBeenCalledTimes(0);
     expect(eventFocusNextSpy).toHaveBeenCalledTimes(0);

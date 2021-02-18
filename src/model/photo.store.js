@@ -1,48 +1,66 @@
+/**
+ * @file Photo store containing all photos sloted in focus element.
+ */
+
+import { Photo } from "./photo";
+import { PhotoElement } from "../components/photo/photo.element";
+
+/**
+ * Photo store.
+ */
 export class PhotoStore {
+  /**
+   * Constructor.
+   */
   constructor() {
-    this.imgPhotoMap = new Map();
+    this.photoMap = new Map();
     this.photosInner = [];
     this.current = null;
   }
 
   /**
-   * Add photo in store
-   * @param {*} photo photo
+   * Add photo in store.
+   *
+   * @param {Photo} photo - Photo.
    */
   add(photo) {
     this.photosInner.push(photo);
-    this.imgPhotoMap.set(photo.imgPhoto, photo);
+    this.photoMap.set(photo.photoElement, photo);
   }
 
   /**
-   * Insert photo after a given photo
-   * @param {*} photo photo to insert
-   * @param {*} previousPhoto previous photo
+   * Insert photo after a given photo.
+   *
+   * @param {Photo} photo - Photo to insert.
+   * @param {PhotoElement} previousPhoto - Previous photo element.
    */
   insert(photo, previousPhoto) {
     this.photosInner.splice(this.photosInner.indexOf(previousPhoto) + 1, 0, photo);
-    this.imgPhotoMap.set(photo.imgPhoto, photo);
+    this.photoMap.set(photo.photoElement, photo);
   }
 
   /**
-   * Select current photo
-   * @param {*} photo photo to select
+   * Select current photo.
+   *
+   * @param {Photo} photo - Photo to select.
    */
   select(photo) {
     this.current = photo;
   }
 
   /**
-   * Get current photo
-   * @returns {*} current photo
+   * Get current photo.
+   *
+   * @returns {Photo} Current photo.
    */
   getCurrent() {
     return this.current;
   }
 
   /**
-   * Navigate to previous photo
-   * @returns {*} previous photo
+   * Navigate to previous photo.
+   *
+   * @returns {Photo} Previous photo.
    */
   prev() {
     const prevPhoto = this.getPrev(this.current);
@@ -53,18 +71,20 @@ export class PhotoStore {
   }
 
   /**
-   * Has previous photo
-   * @param {*} photo photo to check previous
-   * @returns {*} true if photo has previous photo
+   * Has previous photo.
+   *
+   * @param {Photo} photo - Photo to check previous.
+   * @returns {boolean} True if photo has previous photo.
    */
   hasPrev(photo) {
     return this.getPrev(photo) !== null;
   }
 
   /**
-   * Get previous photo
-   * @param {*} photo photo to get previous
-   * @returns {*} previous photo
+   * Get previous photo.
+   *
+   * @param {Photo} photo - Photo to get previous.
+   * @returns {Photo} Previous photo.
    */
   getPrev(photo) {
     const index = this.photosInner.indexOf(photo);
@@ -75,8 +95,9 @@ export class PhotoStore {
   }
 
   /**
-   * Navigate to next photo
-   * @returns {*} next photo
+   * Navigate to next photo.
+   *
+   * @returns {Photo} Next photo.
    */
   next() {
     const nextPhoto = this.getNext(this.current);
@@ -87,18 +108,20 @@ export class PhotoStore {
   }
 
   /**
-   * Has next photo
-   * @param {*} photo photo to check next
-   * @returns {*} true if photo has next photo
+   * Has next photo.
+   *
+   * @param {Photo} photo - Photo to check next.
+   * @returns {boolean} True if photo has next photo.
    */
   hasNext(photo) {
     return this.getNext(photo) !== null;
   }
 
   /**
-   * Get next photo
-   * @param {*} photo photo to get next
-   * @returns {*} next photo
+   * Get next photo.
+   *
+   * @param {Photo} photo - Photo to get next.
+   * @returns {Photo} Next photo.
    */
   getNext(photo) {
     const index = this.photosInner.indexOf(photo);
@@ -109,15 +132,19 @@ export class PhotoStore {
   }
 
   /**
-   * Get photo from img element
-   * @param {*} imgPhoto img element
+   * Get photo from photo element.
+   *
+   * @param {PhotoElement} photoElement - Photo element.
+   * @returns {Photo} Photo.
    */
-  get(imgPhoto) {
-    return this.imgPhotoMap.get(imgPhoto);
+  get(photoElement) {
+    return this.photoMap.get(photoElement);
   }
 
   /**
-   * Get photos
+   * Get photos.
+   *
+   * @returns {Photo[]} Photos elements.
    */
   get photos() {
     return this.photosInner;

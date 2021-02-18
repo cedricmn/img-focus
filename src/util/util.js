@@ -1,12 +1,17 @@
 /**
- * Util class
+ * @file Util class.
+ */
+
+/**
+ * Util class.
  */
 export class Util {
   /**
-   * Copy html attribute from source to target element
-   * @param {*} elementSource source element
-   * @param {*} elementTarget target element
-   * @param {*} attributeName attribute name
+   * Copy html attribute from source to target element.
+   *
+   * @param {HTMLElement} elementSource - Source element.
+   * @param {HTMLElement} elementTarget - Target element.
+   * @param {string} attributeName - Attribute name.
    */
   static copyAttribute(elementSource, elementTarget, attributeName) {
     if (elementSource && elementTarget) {
@@ -19,10 +24,11 @@ export class Util {
   }
 
   /**
-   * Set html attribute to element
-   * @param {*} element element
-   * @param {*} attributeName attribute name
-   * @param {*} value attribute value
+   * Set html attribute to element.
+   *
+   * @param {HTMLElement} element - Element.
+   * @param {string} attributeName - Attribute name.
+   * @param {*} value - Attribute value.
    */
   static setAttribute(element, attributeName, value) {
     if (value) {
@@ -33,10 +39,11 @@ export class Util {
   }
 
   /**
-   * Set boolean html attribute to element
-   * @param {*} element element
-   * @param {*} attributeName attribute name
-   * @param {*} value attribute boolean value
+   * Set boolean html attribute to element.
+   *
+   * @param {HTMLElement} element - Element.
+   * @param {string} attributeName - Attribute name.
+   * @param {boolean} value - Attribute boolean value.
    */
   static setBooleanAttribute(element, attributeName, value) {
     if (value) {

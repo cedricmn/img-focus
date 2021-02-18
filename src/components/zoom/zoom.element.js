@@ -1,3 +1,6 @@
+/**
+ * @file Zoom element.
+ */
 import { Util } from "../../util/util";
 import zoomStyles from "./zoom.styles.less";
 import zoomTemplate from "./zoom.template.html";
@@ -6,20 +9,37 @@ const CLOSE = "close",
   NEXT = "next",
   PREV = "prev";
 
+/**
+ * Zoom element.
+ */
 export class ZoomElement extends HTMLElement {
+  /**
+   * Constructor.
+   */
   constructor() {
     super();
     this.el = this.attachShadow({ mode: "open" });
   }
 
+  /**
+   * Zoom observed attributes.
+   *
+   * @returns {string[]} Observed attributes.
+   */
   static get observedAttributes() {
     return ["hasprevious", "hasnext"];
   }
 
+  /**
+   * Update actions when zoom element attributes are updated.
+   */
   attributeChangedCallback() {
-    this.updateState();
+    this.updateActions();
   }
 
+  /**
+   * Initialiaze element.
+   */
   connectedCallback() {
     const zoomStylesElement = document.createElement("style"),
       zoomTemplateElement = document.createElement("template");
@@ -38,13 +58,16 @@ export class ZoomElement extends HTMLElement {
     this.setup();
   }
 
+  /**
+   * Setup element.
+   */
   setup() {
     this.prevElement = this.el.querySelector(`#${PREV}`);
     this.nextElement = this.el.querySelector(`#${NEXT}`);
     this.closeElement = this.el.querySelector(`#${CLOSE}`);
     this.actions = [this.closeElement, this.nextElement, this.prevElement];
 
-    this.updateState();
+    this.updateActions();
     this.addKeydownEventListener();
 
     // Default focus on close
@@ -69,6 +92,9 @@ export class ZoomElement extends HTMLElement {
     }
   }
 
+  /**
+   * Add keyboad event listener to manage keyboard navigation.
+   */
   addKeydownEventListener() {
     // Keyboard navigation
     this.addEventListener("keydown", (event) => {
@@ -102,7 +128,10 @@ export class ZoomElement extends HTMLElement {
     });
   }
 
-  updateState() {
+  /**
+   * Update available actions based on zoom attributes.
+   */
+  updateActions() {
     if (this.prevElement) {
       Util.setBooleanAttribute(this.prevElement, "disabled", !this.hasAttribute("hasprevious"));
     }
@@ -111,22 +140,43 @@ export class ZoomElement extends HTMLElement {
     }
   }
 
+  /**
+   * Disaptch zoom event.
+   *
+   * @param {string} id - Zoom event name.
+   */
   sendEvent(id) {
     this.dispatchEvent(new Event(`img-zoom-${id}`));
   }
 
+  /**
+   * Get "hasprevious" attribute value.
+   *
+   * @returns {string} "hasprevious" attribute value.
+   */
   get hasprevious() {
     return this.getAttribute("hasprevious");
   }
 
+  /**
+   * Set "hasprevious" attribute.
+   */
   set hasprevious(hasprevious) {
     this.setAttribute("hasprevious", hasprevious);
   }
 
+  /**
+   * Get "hasnext" attribute value.
+   *
+   * @returns {string} "hasnext" attribute value.
+   */
   get hasnext() {
     return this.getAttribute("hasnext");
   }
 
+  /**
+   * Set "hasnext" attribute.
+   */
   set hasnext(hasnext) {
     this.setAttribute("hasnext", hasnext);
   }

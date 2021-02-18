@@ -1,108 +1,117 @@
+/**
+ * @file Test util class.
+ */
 import "../src/index";
 
+/**
+ * Test util class.
+ */
 export class UtilTest {
   /**
-   * Initialize focus element
+   * Initialize focus element.
    *
-   * @param {*} document document
-   * @param  {...any} childs focus element childs
+   * @param {*} document - Document.
+   * @param {...any} childs - Focus element childs.
+   * @returns {*} Focus elements.
    */
   static async initFocus(document, ...childs) {
     await window.customElements.whenDefined("img-focus");
 
-    const imgFocus = document.createElement("img-focus");
+    const focusElement = document.createElement("img-focus");
     if (childs) {
-      childs.forEach((child) => imgFocus.appendChild(child));
+      childs.forEach((child) => focusElement.appendChild(child));
     }
-    document.body.appendChild(imgFocus);
+    document.body.appendChild(focusElement);
 
-    const imgZoom = imgFocus.shadowRoot.querySelector("img-zoom");
+    const zoomElement = focusElement.shadowRoot.querySelector("img-zoom");
 
     return {
-      focusSlot: imgFocus.shadowRoot.querySelector("#focus"),
-      imgFocus,
-      zoomClose: imgZoom.shadowRoot.querySelector("#close"),
-      zoomNext: imgZoom.shadowRoot.querySelector("#next"),
-      zoomPrev: imgZoom.shadowRoot.querySelector("#prev"),
-      zoomSlot: imgZoom.shadowRoot.querySelector("#slot"),
+      focusElement,
+      focusSlot: focusElement.shadowRoot.querySelector("#focus"),
+      zoomClose: zoomElement.shadowRoot.querySelector("#close"),
+      zoomNext: zoomElement.shadowRoot.querySelector("#next"),
+      zoomPrev: zoomElement.shadowRoot.querySelector("#prev"),
+      zoomSlot: zoomElement.shadowRoot.querySelector("#slot"),
     };
   }
 
   /**
-   * Initialize photo element
+   * Initialize photo element.
    *
-   * @param {*} document document
-   * @param {Object} options initialization options
-   * @param {*} options.append append to document
-   * @param {*} options.height intrinsic photo height
-   * @param {*} options.srcset srcset
-   * @param {*} options.sizes sizes
-   * @param {*} options.width intrinsic photo width
-   * @param {*} options.alt alternative text
-   * @param  {...any} childs photo element childs
+   * @param {*} document - Document.
+   * @param {object} options - Initialization options.
+   * @param {*} options.append - Append to document.
+   * @param {*} options.height - Intrinsic photo height.
+   * @param {*} options.srcset - Photo sources.
+   * @param {*} options.sizes - Photos sizes.
+   * @param {*} options.width - Intrinsic photo width.
+   * @param {*} options.alt - Alternative text.
+   * @param {...any} childs - Photo element childs.
+   * @returns {*} Photo elements.
    */
   static async initPhoto(document, { append, height, srcset, sizes, width, alt } = { append: false }, ...childs) {
     await window.customElements.whenDefined("img-photo");
 
-    const imgPhoto = document.createElement("img-photo");
+    const photoElement = document.createElement("img-photo");
     if (height) {
-      imgPhoto.height = height;
+      photoElement.height = height;
     }
     if (srcset) {
-      imgPhoto.srcset = srcset;
+      photoElement.srcset = srcset;
     }
     if (sizes) {
-      imgPhoto.sizes = sizes;
+      photoElement.sizes = sizes;
     }
     if (width) {
-      imgPhoto.width = width;
+      photoElement.width = width;
     }
     if (alt) {
-      imgPhoto.alt = alt;
+      photoElement.alt = alt;
     }
     if (childs) {
-      childs.forEach((child) => imgPhoto.appendChild(child));
+      childs.forEach((child) => photoElement.appendChild(child));
     }
     if (append) {
-      document.body.appendChild(imgPhoto);
+      document.body.appendChild(photoElement);
     }
 
     return {
-      imgPhoto,
-      photoSlot: imgPhoto.shadowRoot.querySelector("#slot"),
+      photoElement,
+      photoSlot: photoElement.shadowRoot.querySelector("#slot"),
     };
   }
 
   /**
-   * Initialize zoom element
+   * Initialize zoom element.
    *
-   * @param {*} document document
-   * @param {Object} options initialization options
-   * @param {*} options.append append to document
-   * @param {*} options.hasPrevious has previous picture
-   * @param {*} options.hasNext has next picture
-   * @param  {...any} childs zoom element childs
+   * @param {*} document - Document.
+   * @param {object} options - Initialization options.
+   * @param {*} options.append - Append to document.
+   * @param {*} options.hasPrevious - Has previous picture.
+   * @param {*} options.hasNext - Has next picture.
+   * @param {...any} childs - Zoom element childs.
+   * @returns {*} Zoom elements.
    */
   static async initZoom(document, { append, hasPrevious, hasNext } = { append: false }, ...childs) {
     await window.customElements.whenDefined("img-zoom");
 
-    const imgZoom = document.createElement("img-zoom");
+    const zoomElement = document.createElement("img-zoom");
     if (hasPrevious) {
-      imgZoom.hasprevious = "";
+      zoomElement.hasprevious = "";
     }
     if (hasNext) {
-      imgZoom.hasnext = "";
+      zoomElement.hasnext = "";
     }
     if (childs) {
-      childs.forEach((child) => imgZoom.appendChild(child));
+      childs.forEach((child) => zoomElement.appendChild(child));
     }
     if (append) {
-      document.body.appendChild(imgZoom);
+      document.body.appendChild(zoomElement);
     }
 
-    const zoomClose = imgZoom.shadowRoot.querySelector("#close"),
-      zoomNext = imgZoom.shadowRoot.querySelector("#next"),
-      zoomPrev = imgZoom.shadowRoot.querySelector("#prev");
+    const zoomClose = zoomElement.shadowRoot.querySelector("#close"),
+      zoomNext = zoomElement.shadowRoot.querySelector("#next"),
+      zoomPrev = zoomElement.shadowRoot.querySelector("#prev");
 
     // Need tabIndex for JSDOM to update activeElement while focusing an element
     zoomClose.tabIndex = 0;
@@ -110,11 +119,11 @@ export class UtilTest {
     zoomPrev.tabIndex = 0;
 
     return {
-      imgZoom,
       zoomClose,
+      zoomElement,
       zoomNext,
       zoomPrev,
-      zoomSlot: imgZoom.shadowRoot.querySelector("#slot"),
+      zoomSlot: zoomElement.shadowRoot.querySelector("#slot"),
     };
   }
 }

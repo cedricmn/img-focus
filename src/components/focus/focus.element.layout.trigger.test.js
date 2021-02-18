@@ -1,3 +1,6 @@
+/**
+ * @file Focus element layout triggering tests.
+ */
 import "../../index.js";
 import { UtilTest } from "../../../test/utiltest";
 
@@ -7,12 +10,12 @@ describe("img-focus layout triggering", () => {
   it("should layout while loading", async () => {
     expect.assertions(2);
 
-    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+    const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
       ),
-      layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal"),
-      resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
+      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
+      resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles");
 
     // Trigger layout
     focusSlot
@@ -29,16 +32,16 @@ describe("img-focus layout triggering", () => {
   it("should layout when photo ready", async () => {
     expect.assertions(4);
 
-    const { imgFocus } = await UtilTest.initFocus(document),
-      layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal"),
-      resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
+    const { focusElement } = await UtilTest.initFocus(document),
+      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
+      resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles");
 
     expect(resetStyleSpy).toHaveBeenCalledTimes(0);
     expect(layoutInternalSpy).toHaveBeenCalledTimes(0);
 
     // Trigger layout by slotting photo
-    const { imgPhoto } = await UtilTest.initPhoto(document, { height: 100, srcset: "focus.png 320w", width: 200 });
-    await imgFocus.appendChild(imgPhoto);
+    const { photoElement } = await UtilTest.initPhoto(document, { height: 100, srcset: "focus.png 320w", width: 200 });
+    await focusElement.appendChild(photoElement);
 
     jest.runAllTimers();
 
@@ -49,13 +52,13 @@ describe("img-focus layout triggering", () => {
   it("should layout while resizing", async () => {
     expect.assertions(4);
 
-    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+    const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
       ),
       event = new Event("resize-mock", { bubbles: true }),
-      layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal"),
-      resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
+      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
+      resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles");
 
     // Trigger layout
     focusSlot.dispatchEvent(event);
@@ -78,13 +81,13 @@ describe("img-focus layout triggering", () => {
   it("should debounce layout while loading more photos", async () => {
     expect.assertions(6);
 
-    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+    const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
       ),
       event = new Event("load", { bubbles: true }),
-      layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal"),
-      resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
+      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
+      resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles");
 
     // Trigger layout
     focusSlot.assignedNodes()[0].getImg().dispatchEvent(event);
@@ -111,22 +114,22 @@ describe("img-focus layout triggering", () => {
   it("should layout two times when scrollbar appears", async () => {
     expect.assertions(8);
 
-    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+    const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
       ),
       event = new Event("load", { bubbles: true }),
-      getFocusElementBoundingSpy = jest.spyOn(imgFocus, "getFocusElementBounding"),
-      layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal"),
-      resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles"),
-      updateDomSpy = jest.spyOn(imgFocus.layout, "updateDom"),
-      updateHeightSpy = jest.spyOn(imgFocus.layout, "updateHeight");
+      getFocusSlotBoundingSpy = jest.spyOn(focusElement, "getFocusSlotBounding"),
+      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
+      resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles"),
+      updateDomSpy = jest.spyOn(focusElement.layout, "updateDom"),
+      updateHeightSpy = jest.spyOn(focusElement.layout, "updateHeight");
 
     // Simulate initial focus element width
-    getFocusElementBoundingSpy.mockImplementation(() => ({ width: 1080 }));
+    getFocusSlotBoundingSpy.mockImplementation(() => ({ width: 1080 }));
 
     // Reduce focus element width after first layout
-    updateHeightSpy.mockImplementation(() => getFocusElementBoundingSpy.mockImplementation(() => ({ width: 1060 })));
+    updateHeightSpy.mockImplementation(() => getFocusSlotBoundingSpy.mockImplementation(() => ({ width: 1060 })));
 
     // Trigger layout
     focusSlot.assignedNodes()[0].getImg().dispatchEvent(event);

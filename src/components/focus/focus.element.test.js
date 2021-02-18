@@ -1,3 +1,6 @@
+/**
+ * @file Focus element tests.
+ */
 import "../../index.js";
 import { UtilTest } from "../../../test/utiltest";
 
@@ -26,7 +29,7 @@ describe("img-focus", () => {
 
     const { focusSlot, zoomSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
       ),
       event = new MouseEvent("click", { bubbles: true });
 
@@ -45,8 +48,8 @@ describe("img-focus", () => {
 
     const { focusSlot, zoomSlot, zoomPrev, zoomNext, zoomClose } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto,
-        (await UtilTest.initPhoto(document, { srcset: "focus2.png 320w" })).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement,
+        (await UtilTest.initPhoto(document, { srcset: "focus2.png 320w" })).photoElement
       ),
       event = new MouseEvent("click", { bubbles: true }),
       eventPhotoCloseSpy = jest.fn(),

@@ -1,3 +1,6 @@
+/**
+ * @file Focus element layout calculation tests.
+ */
 import "../../index.js";
 import { UtilTest } from "../../../test/utiltest";
 
@@ -7,14 +10,14 @@ describe("img-focus layout calculation", () => {
   it("should correct bad Chrome width calculation", async () => {
     expect.assertions(3);
 
-    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+    const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
       ),
       event = new Event("load", { bubbles: true }),
-      getCorrectedWidthSpy = jest.spyOn(imgFocus.layout, "getCorrectedWidth"),
-      layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal"),
-      resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
+      getCorrectedWidthSpy = jest.spyOn(focusElement.layout, "getCorrectedWidth"),
+      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
+      resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles");
 
     /*
      * Simulate bad right photo element calculation in Chrome (should be lower than focus element width)
@@ -24,9 +27,9 @@ describe("img-focus layout calculation", () => {
      * In this case, photo div element width is calculated using width value (1080 - 1000)
      * instead of right value (1081 - 1000)
      */
-    jest.spyOn(imgFocus, "getFocusElementBounding").mockImplementation(() => ({ right: 1080 }));
+    jest.spyOn(focusElement, "getFocusSlotBounding").mockImplementation(() => ({ right: 1080 }));
 
-    jest.spyOn(imgFocus.getStore().photos[0], "getBounding").mockImplementation(() => ({
+    jest.spyOn(focusElement.getStore().photos[0], "getBounding").mockImplementation(() => ({
       left: 1000,
       right: 1081,
     }));
@@ -44,20 +47,20 @@ describe("img-focus layout calculation", () => {
   it("should apply computed height for lines except last one", async () => {
     expect.assertions(7);
 
-    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+    const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto,
-        (await UtilTest.initPhoto(document, { srcset: "focus2.png 320w" })).imgPhoto,
-        (await UtilTest.initPhoto(document, { srcset: "focus3.png 320w" })).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement,
+        (await UtilTest.initPhoto(document, { srcset: "focus2.png 320w" })).photoElement,
+        (await UtilTest.initPhoto(document, { srcset: "focus3.png 320w" })).photoElement
       ),
       event = new Event("load", { bubbles: true }),
-      getCorrectedWidthSpy = jest.spyOn(imgFocus.layout, "getCorrectedWidth"),
-      layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal"),
-      resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
+      getCorrectedWidthSpy = jest.spyOn(focusElement.layout, "getCorrectedWidth"),
+      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
+      resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles");
 
-    jest.spyOn(imgFocus, "getFocusElementBounding").mockImplementation(() => ({ width: 200 }));
+    jest.spyOn(focusElement, "getFocusSlotBounding").mockImplementation(() => ({ width: 200 }));
 
-    imgFocus.getStore().photos.forEach((photo, index) => {
+    focusElement.getStore().photos.forEach((photo, index) => {
       const shift = 205 * index;
       jest.spyOn(photo, "getBounding").mockImplementation(() => ({
         left: 0,
@@ -91,20 +94,20 @@ describe("img-focus layout calculation", () => {
   it("should not apply computed height for single line", async () => {
     expect.assertions(7);
 
-    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+    const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).imgPhoto,
-        (await UtilTest.initPhoto(document, { srcset: "focus2.png 320w" })).imgPhoto,
-        (await UtilTest.initPhoto(document, { srcset: "focus3.png 320w" })).imgPhoto
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement,
+        (await UtilTest.initPhoto(document, { srcset: "focus2.png 320w" })).photoElement,
+        (await UtilTest.initPhoto(document, { srcset: "focus3.png 320w" })).photoElement
       ),
       event = new Event("load", { bubbles: true }),
-      getCorrectedWidthSpy = jest.spyOn(imgFocus.layout, "getCorrectedWidth"),
-      layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal"),
-      resetStyleSpy = jest.spyOn(imgFocus.layout, "resetStyles");
+      getCorrectedWidthSpy = jest.spyOn(focusElement.layout, "getCorrectedWidth"),
+      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
+      resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles");
 
-    jest.spyOn(imgFocus, "getFocusElementBounding").mockImplementation(() => ({ width: 1080 }));
+    jest.spyOn(focusElement, "getFocusSlotBounding").mockImplementation(() => ({ width: 1080 }));
 
-    imgFocus.getStore().photos.forEach((photo, index) => {
+    focusElement.getStore().photos.forEach((photo, index) => {
       const shift = index * 200;
       jest.spyOn(photo, "getBounding").mockImplementation(() => ({
         left: 0 + shift,
@@ -138,18 +141,18 @@ describe("img-focus layout calculation with provided width and height", () => {
   it("should layout with accurate provided width and height", async () => {
     expect.assertions(6);
 
-    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+    const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus.png 320w", width: 100 })).imgPhoto,
-        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus2.png 320w", width: 100 })).imgPhoto,
-        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 100 })).imgPhoto
+        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus.png 320w", width: 100 })).photoElement,
+        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus2.png 320w", width: 100 })).photoElement,
+        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 100 })).photoElement
       ),
-      getCorrectedWidthSpy = jest.spyOn(imgFocus.layout, "getCorrectedWidth"),
-      layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal");
+      getCorrectedWidthSpy = jest.spyOn(focusElement.layout, "getCorrectedWidth"),
+      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal");
 
-    jest.spyOn(imgFocus, "getFocusElementBounding").mockImplementation(() => ({ width: 200 }));
+    jest.spyOn(focusElement, "getFocusSlotBounding").mockImplementation(() => ({ width: 200 }));
 
-    imgFocus.getStore().photos.forEach((photo, index) => {
+    focusElement.getStore().photos.forEach((photo, index) => {
       const shift = 205 * index;
       jest.spyOn(photo, "getBounding").mockImplementation(() => ({
         left: 0,
@@ -180,19 +183,19 @@ describe("img-focus layout calculation with provided width and height", () => {
     expect.assertions(7);
 
     // With width of 50, 100, 160 instead of 100
-    const { imgFocus, focusSlot } = await UtilTest.initFocus(
+    const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus.png 320w", width: 50 })).imgPhoto,
-        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus2.png 320w", width: 100 })).imgPhoto,
-        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 160 })).imgPhoto,
-        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 100 })).imgPhoto
+        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus.png 320w", width: 50 })).photoElement,
+        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus2.png 320w", width: 100 })).photoElement,
+        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 160 })).photoElement,
+        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 100 })).photoElement
       ),
-      getCorrectedWidthSpy = jest.spyOn(imgFocus.layout, "getCorrectedWidth"),
-      layoutInternalSpy = jest.spyOn(imgFocus.layout, "layoutInternal");
+      getCorrectedWidthSpy = jest.spyOn(focusElement.layout, "getCorrectedWidth"),
+      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal");
 
-    jest.spyOn(imgFocus, "getFocusElementBounding").mockImplementation(() => ({ width: 200 }));
+    jest.spyOn(focusElement, "getFocusSlotBounding").mockImplementation(() => ({ width: 200 }));
 
-    imgFocus.getStore().photos.forEach((photo, index) => {
+    focusElement.getStore().photos.forEach((photo, index) => {
       const shift = 205 * index;
       jest.spyOn(photo, "getBounding").mockImplementation(() => ({
         left: 0,

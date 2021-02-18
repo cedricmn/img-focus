@@ -1,41 +1,58 @@
+/**
+ * @file Photo.
+ */
+
+import { PhotoElement } from "../components/photo/photo.element";
+
+/**
+ * Photo.
+ */
 export class Photo {
   /**
-   * Constructor
+   * Photo constructor.
    *
-   * @param {*} imgPhoto image photo element
+   * @param {PhotoElement} photoElement - Photo element.
    */
-  constructor(imgPhoto) {
-    this.imgPhotoInner = imgPhoto;
+  constructor(photoElement) {
+    this.photoElementInner = photoElement;
   }
 
   /**
-   * Get image photo element
+   * Get photo element.
+   *
+   * @returns {PhotoElement} Photo element.
    */
-  get imgPhoto() {
-    return this.imgPhotoInner;
+  get photoElement() {
+    return this.photoElementInner;
   }
 
   /**
-   * Get image bounding
+   * Get image bounding.
+   *
+   * @returns {DOMRect} Image element bounding.
    */
   getImgBounding() {
-    return this.imgPhotoInner.getImg().getBoundingClientRect();
+    return this.photoElementInner.getImg().getBoundingClientRect();
   }
 
   /**
-   * Get bounding
+   * Get bounding.
+   *
+   * @returns {DOMRect} Photo element bounding.
    */
   getBounding() {
-    return this.imgPhotoInner.getBoundingClientRect();
+    return this.photoElementInner.getBoundingClientRect();
   }
 
   /**
-   * Get normalized image width
+   * Get normalized image width.
+   *
+   * @returns {number} Image width.
    */
   getImageWidth() {
-    if (this.imgPhoto.width && this.imgPhoto.height) {
+    if (this.photoElement.width && this.photoElement.height) {
       // Normalize to have consistent layout before and after image load
-      return (this.imgPhoto.width * this.getImgBounding().height) / this.imgPhoto.height;
+      return (this.photoElement.width * this.getImgBounding().height) / this.photoElement.height;
     }
     return this.getImgBounding().width;
   }

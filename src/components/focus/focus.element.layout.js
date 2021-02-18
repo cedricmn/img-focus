@@ -1,18 +1,36 @@
+/**
+ * @file Focus element layout logic.
+ */
+import { FocusElement } from "./focus.element";
+import { Photo } from "../../model/photo";
 const HEIGHT_TRIGGER = 50,
   LAYOUT_DEBOUNCE_TIME = 200,
   SIZE_MARGIN = 0.01;
 
 /**
- * Layout focus
+ * @typedef {object} LayoutData
+ * @property {number} gap - Row gap between photos.
+ * @property {number} lineHeight - Initial line height that will be used for last line.
+ * @property {Photo[][]} linesPhotos - Photos on each line.
+ * @property {number[]} newLineHeight - New height for each lines.
+ */
+
+/**
+ * Focus element layout logic.
  */
 export class FocusElementLayout {
-  constructor(focus) {
-    this.focus = focus;
+  /**
+   * Constructor.
+   *
+   * @param {FocusElement} focusElement - Focus element.
+   */
+  constructor(focusElement) {
+    this.focusElement = focusElement;
     this.timeout = null;
   }
 
   /**
-   * Debounced layout
+   * Debounced layout.
    */
   layout() {
     // Reset styles to do calculations
@@ -28,12 +46,12 @@ export class FocusElementLayout {
   }
 
   /**
-   * Layout
+   * Layout internal.
    */
   layoutInternal() {
     // Get focus element width before layout and compute new height
     const data = this.computeNewLineHeight(),
-      widthBefore = this.focus.getFocusElementBounding().width;
+      widthBefore = this.focusElement.getFocusSlotBounding().width;
 
     // Update focus height to force scrollbar display if needed
     this.updateHeight(data);
@@ -43,7 +61,7 @@ export class FocusElementLayout {
      * shift content. In this case a new layout will be performed by resize observer
      * due to focus width update.
      */
-    if (widthBefore - this.focus.getFocusElementBounding().width > 0) {
+    if (widthBefore - this.focusElement.getFocusSlotBounding().width > 0) {
       return;
     }
 
@@ -52,16 +70,21 @@ export class FocusElementLayout {
   }
 
   /**
-   * Reset styles for layout height calculation
+   * Reset styles for layout height calculation.
    */
   resetStyles() {
     // Reset styles to let do flexbox layout
-    this.focus.getFocusElement().classList.remove("noflex");
-    this.focus.getStore().photos.forEach((photo) => {
-      photo.imgPhoto.clearSize();
+    this.focusElement.getFocusSlot().classList.remove("noflex");
+    this.focusElement.getStore().photos.forEach((photo) => {
+      photo.photoElement.clearSize();
     });
   }
 
+  /**
+   * Compute layout data based on image size or on photo element intrinsec width provided.
+   *
+   * @returns {LayoutData} - Layout data.
+   */
   computeNewLineHeight() {
     const linesHeight = [],
       linesPhotos = [],
@@ -73,7 +96,7 @@ export class FocusElementLayout {
       previousOffsetLeft = -1;
 
     // Loop on each photos to isolate lines information
-    this.focus.getStore().photos.forEach((photo, index) => {
+    this.focusElement.getStore().photos.forEach((photo, index) => {
       if (previousOffsetLeft >= photo.getImgBounding().left || index === 0) {
         linesHeight.push(photo.getImgBounding().height);
         linesPhotosWidth.push(0);
@@ -108,14 +131,12 @@ export class FocusElementLayout {
   }
 
   /**
-   * Update focus height to let scrollbar appear
-   * @param {Object} data computed new line height
-   * @param {*} data.newLineHeight array of new height for each lines
-   * @param {*} data.lineHeight initial line height that will be used for last line
-   * @param {*} data.gap grid gap
+   * Update focus height to let scrollbar appear.
+   *
+   * @param {LayoutData} data - Layout data.
    */
   updateHeight({ newLineHeight, lineHeight, gap }) {
-    const heightBefore = this.focus.getFocusElementBounding().height,
+    const heightBefore = this.focusElement.getFocusSlotBounding().height,
       newHeight = newLineHeight.slice(0, -1).reduce((accumulator, value) => accumulator + value + gap, lineHeight);
 
     /*
@@ -125,47 +146,48 @@ export class FocusElementLayout {
      * after next layout.
      */
     if (!heightBefore || newHeight > heightBefore || heightBefore - newHeight > HEIGHT_TRIGGER) {
-      this.focus.getFocusElement().style.height = `${newHeight}px`;
+      this.focusElement.getFocusSlot().style.height = `${newHeight}px`;
     }
   }
 
   /**
-   * Update DOM with new height
-   * @param {Object} data computed new line height
-   * @param {*} data.linesPhotos array of photos for each lines
-   * @param {*} data.newLineHeight array of new height for each lines
+   * Update DOM with new height.
+   *
+   * @param {LayoutData} data - Layout data.
    */
   updateDom({ linesPhotos, newLineHeight }) {
     // Avoids 1 pixel space between pictures on Chrome
-    this.focus.getFocusElement().classList.add("noflex");
+    this.focusElement.getFocusSlot().classList.add("noflex");
 
     linesPhotos.forEach((linePhotos, index, arr) => {
       // No flex for last photos line to avoid big photos on last line
       if (index !== arr.length - 1) {
         linePhotos.forEach((linePhoto) => {
-          if (linePhoto.imgPhoto.width && linePhoto.imgPhoto.height) {
+          if (linePhoto.photoElement.width && linePhoto.photoElement.height) {
             // Force width to avoid bad layout if inaccurate width and height provided
-            const width = (linePhoto.imgPhoto.width * newLineHeight[index]) / linePhoto.imgPhoto.height;
-            linePhoto.imgPhoto.setWidth(`${width - SIZE_MARGIN}px`);
+            const width = (linePhoto.photoElement.width * newLineHeight[index]) / linePhoto.photoElement.height;
+            linePhoto.photoElement.setWidth(`${width - SIZE_MARGIN}px`);
           }
 
           // Need some margin to avoid bad layout
-          linePhoto.imgPhoto.setHeight(`${newLineHeight[index] - SIZE_MARGIN}px`);
+          linePhoto.photoElement.setHeight(`${newLineHeight[index] - SIZE_MARGIN}px`);
         });
       }
     });
   }
 
   /**
-   * Get corrected width of flexbox element
-   * Chrome sometimes returns bigger photo element right position than focus element
-   * @param {*} photo photo
+   * Get corrected width of photo element.
+   * Chrome sometimes returns bigger photo element right position than focus element.
+   *
+   * @param {Photo} photo - Photo.
+   * @returns {number} Corrected width.
    */
   getCorrectedWidth(photo) {
     // Ignore photo bigger than focus (occurs in Chrome)
     let boundingRight = photo.getBounding().right;
-    if (boundingRight > this.focus.getFocusElementBounding().right) {
-      boundingRight = this.focus.getFocusElementBounding().right;
+    if (boundingRight > this.focusElement.getFocusSlotBounding().right) {
+      boundingRight = this.focusElement.getFocusSlotBounding().right;
     }
 
     return boundingRight - photo.getBounding().left;

@@ -1,3 +1,6 @@
+/**
+ * @file Util class tests.
+ */
 import { Util } from "./util";
 
 describe("copy attribute", () => {

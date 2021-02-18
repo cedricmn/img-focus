@@ -28,7 +28,7 @@
     <div id="root"></div>
 
     <script>
-      const imgFocus = document.createElement("img-focus");
+      const focusElement = document.createElement("img-focus");
       document.addEventListener("img-focus-photo-open", () => {
         const oldWidth = document.body.getBoundingClientRect().width;
         document.body.style.overflow = "hidden";
@@ -42,20 +42,20 @@
 
       for (let i = 1; i <= 100; i++) {
         const height = 200 + 100 * (i % 3);
-        const imgPhoto = document.createElement("img-photo");
-        imgPhoto.setAttribute(
+        const photoElement = document.createElement("img-photo");
+        photoElement.setAttribute(
           "srcset",
           `https://picsum.photos/seed/${i}/320/${height} 320w,` +
             ` https://picsum.photos/seed/${i}/640/${height * 2} 640w,` +
             ` https://picsum.photos/seed/${i}/1280/${height * 4} 1280w`
         );
-        imgPhoto.setAttribute("width", 1280);
-        imgPhoto.setAttribute("height", height * 4);
-        imgPhoto.setAttribute("alt", `Photo ${i}`);
-        imgFocus.appendChild(imgPhoto);
+        photoElement.setAttribute("width", 1280);
+        photoElement.setAttribute("height", (height * 4) + 1);
+        photoElement.setAttribute("alt", `Photo ${i}`);
+        focusElement.appendChild(photoElement);
       }
 
-      document.querySelector("#root").appendChild(imgFocus);
+      document.querySelector("#root").appendChild(focusElement);
     </script>
     <script src="img-focus.js"></script>
   </body>

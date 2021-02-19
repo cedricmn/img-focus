@@ -88,7 +88,7 @@ describe("img-focus layout calculation", () => {
     expect(focusSlot.style.height).toBe("1010px");
     expect(focusSlot.assignedNodes()[0].getImg().style.height).toBe("399.99px");
     expect(focusSlot.assignedNodes()[1].getImg().style.height).toBe("399.99px");
-    expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("");
+    expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("200px");
   });
 
   it("should not apply computed height for single line", async () => {
@@ -131,9 +131,9 @@ describe("img-focus layout calculation", () => {
     expect(resetStyleSpy).toHaveBeenCalledTimes(1);
 
     expect(focusSlot.style.height).toBe("200px");
-    expect(focusSlot.assignedNodes()[0].getImg().style.height).toBe("");
-    expect(focusSlot.assignedNodes()[1].getImg().style.height).toBe("");
-    expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("");
+    expect(focusSlot.assignedNodes()[0].getImg().style.height).toBe("200px");
+    expect(focusSlot.assignedNodes()[1].getImg().style.height).toBe("200px");
+    expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("200px");
   });
 });
 
@@ -176,7 +176,7 @@ describe("img-focus layout calculation with provided width and height", () => {
     expect(focusSlot.style.height).toBe("1010px");
     expect(focusSlot.assignedNodes()[0].getImg().style.height).toBe("399.99px");
     expect(focusSlot.assignedNodes()[1].getImg().style.height).toBe("399.99px");
-    expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("");
+    expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("200px");
   });
 
   it("should layout with inaccurate provided width and height", async () => {
@@ -220,6 +220,6 @@ describe("img-focus layout calculation with provided width and height", () => {
     expect(focusSlot.assignedNodes()[0].getImg().style.height).toBe("799.99px");
     expect(focusSlot.assignedNodes()[1].getImg().style.height).toBe("399.99px");
     expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("249.99px");
-    expect(focusSlot.assignedNodes()[3].getImg().style.height).toBe("");
+    expect(focusSlot.assignedNodes()[3].getImg().style.height).toBe("200px");
   });
 });

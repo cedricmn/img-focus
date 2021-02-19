@@ -155,24 +155,27 @@ export class FocusElementLayout {
    *
    * @param {LayoutData} data - Layout data.
    */
-  updateDom({ linesPhotos, newLineHeight }) {
+  updateDom({ lineHeight, linesPhotos, newLineHeight }) {
     // Avoids 1 pixel space between pictures on Chrome
     this.focusElement.getFocusSlot().classList.add("noflex");
 
     linesPhotos.forEach((linePhotos, index, arr) => {
-      // No flex for last photos line to avoid big photos on last line
+      // Default height for last line to avoid big photos
+      let photoHeight = lineHeight;
       if (index !== arr.length - 1) {
-        linePhotos.forEach((linePhoto) => {
-          if (linePhoto.photoElement.width && linePhoto.photoElement.height) {
-            // Force width to avoid bad layout if inaccurate width and height provided
-            const width = (linePhoto.photoElement.width * newLineHeight[index]) / linePhoto.photoElement.height;
-            linePhoto.photoElement.setWidth(`${width - SIZE_MARGIN}px`);
-          }
-
-          // Need some margin to avoid bad layout
-          linePhoto.photoElement.setHeight(`${newLineHeight[index] - SIZE_MARGIN}px`);
-        });
+        // Need some margin to avoid bad layout
+        photoHeight = newLineHeight[index] - SIZE_MARGIN;
       }
+
+      linePhotos.forEach((linePhoto) => {
+        if (linePhoto.photoElement.width && linePhoto.photoElement.height) {
+          // Force width to avoid bad layout if inaccurate width and height provided
+          const width = (linePhoto.photoElement.width * photoHeight) / linePhoto.photoElement.height;
+          linePhoto.photoElement.setWidth(`${width - SIZE_MARGIN}px`);
+        }
+
+        linePhoto.photoElement.setHeight(`${photoHeight}px`);
+      });
     });
   }
 

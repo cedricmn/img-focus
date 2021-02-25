@@ -10,7 +10,6 @@ const HEIGHT_TRIGGER = 50,
 /**
  * @typedef {object} LayoutData
  * @property {number} gap - Row gap between photos.
- * @property {number} lineHeight - Initial line height that will be used for last line.
  * @property {Photo[][]} linesPhotos - Photos on each line.
  * @property {number[]} newLineHeight - New height for each lines.
  */
@@ -116,6 +115,7 @@ export class FocusElementLayout {
     linesHeight.forEach((height, index) => {
       newLineHeight.push((height * linesWidth[index]) / linesPhotosWidth[index]);
     });
+    FocusElementLayout.updateLastLineHeight(newLineHeight, linesHeight[0]);
 
     // Get grid gap if there are more than one line
     if (linesPhotos.length > 1) {
@@ -124,10 +124,31 @@ export class FocusElementLayout {
 
     return {
       gap,
-      lineHeight: linesHeight[0],
       linesPhotos,
       newLineHeight,
     };
+  }
+
+  /**
+   * Update last line height.
+   *
+   * @param {number[]} newLineHeight - New height for each lines.
+   * @param {number} lineHeight - Initial line height.
+   */
+  static updateLastLineHeight(newLineHeight, lineHeight) {
+    // Remove last line from computed height
+    const lastLineHeight = newLineHeight.pop();
+    // Initial height by default for a single line
+    let newLastLineHeight = lineHeight;
+    if (newLineHeight.length >= 1) {
+      // Compute mean height
+      const meanLineHeight =
+        newLineHeight.reduce((accumulator, value) => accumulator + value, 0) / newLineHeight.length;
+
+      // Use mean or computed height to get consistent last line height
+      newLastLineHeight = Math.min(meanLineHeight, lastLineHeight);
+    }
+    newLineHeight.push(newLastLineHeight);
   }
 
   /**
@@ -135,9 +156,9 @@ export class FocusElementLayout {
    *
    * @param {LayoutData} data - Layout data.
    */
-  updateHeight({ newLineHeight, lineHeight, gap }) {
+  updateHeight({ newLineHeight, gap }) {
     const heightBefore = this.focusElement.getFocusSlotBounding().height,
-      newHeight = newLineHeight.slice(0, -1).reduce((accumulator, value) => accumulator + value + gap, lineHeight);
+      newHeight = newLineHeight.reduce((accumulator, value) => accumulator + value + gap, -gap);
 
     /*
      * Grow focus height to force scrollbar display if needed. Reduce height only
@@ -155,17 +176,13 @@ export class FocusElementLayout {
    *
    * @param {LayoutData} data - Layout data.
    */
-  updateDom({ lineHeight, linesPhotos, newLineHeight }) {
+  updateDom({ linesPhotos, newLineHeight }) {
     // Avoids 1 pixel space between pictures on Chrome
     this.focusElement.getFocusSlot().classList.add("noflex");
 
-    linesPhotos.forEach((linePhotos, index, arr) => {
-      // Default height for last line to avoid big photos
-      let photoHeight = lineHeight;
-      if (index !== arr.length - 1) {
-        // Need some margin to avoid bad layout
-        photoHeight = newLineHeight[index] - SIZE_MARGIN;
-      }
+    linesPhotos.forEach((linePhotos, index) => {
+      // Need some margin to avoid bad layout
+      const photoHeight = newLineHeight[index] - SIZE_MARGIN;
 
       linePhotos.forEach((linePhoto) => {
         if (linePhoto.photoElement.width && linePhoto.photoElement.height) {

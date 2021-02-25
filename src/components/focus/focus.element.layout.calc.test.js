@@ -44,7 +44,7 @@ describe("img-focus layout calculation", () => {
     expect(resetStyleSpy).toHaveBeenCalledTimes(1);
   });
 
-  it("should apply computed height for lines except last one", async () => {
+  it("should apply computed height", async () => {
     expect.assertions(7);
 
     const { focusElement, focusSlot } = await UtilTest.initFocus(
@@ -85,10 +85,10 @@ describe("img-focus layout calculation", () => {
     expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
     expect(resetStyleSpy).toHaveBeenCalledTimes(1);
 
-    expect(focusSlot.style.height).toBe("1010px");
+    expect(focusSlot.style.height).toBe("1210px");
     expect(focusSlot.assignedNodes()[0].getImg().style.height).toBe("399.99px");
     expect(focusSlot.assignedNodes()[1].getImg().style.height).toBe("399.99px");
-    expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("200px");
+    expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("399.99px");
   });
 
   it("should not apply computed height for single line", async () => {
@@ -131,9 +131,9 @@ describe("img-focus layout calculation", () => {
     expect(resetStyleSpy).toHaveBeenCalledTimes(1);
 
     expect(focusSlot.style.height).toBe("200px");
-    expect(focusSlot.assignedNodes()[0].getImg().style.height).toBe("200px");
-    expect(focusSlot.assignedNodes()[1].getImg().style.height).toBe("200px");
-    expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("200px");
+    expect(focusSlot.assignedNodes()[0].getImg().style.height).toBe("199.99px");
+    expect(focusSlot.assignedNodes()[1].getImg().style.height).toBe("199.99px");
+    expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("199.99px");
   });
 });
 
@@ -173,10 +173,10 @@ describe("img-focus layout calculation with provided width and height", () => {
     expect(getCorrectedWidthSpy).toHaveBeenCalledTimes(3);
     expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
 
-    expect(focusSlot.style.height).toBe("1010px");
+    expect(focusSlot.style.height).toBe("1210px");
     expect(focusSlot.assignedNodes()[0].getImg().style.height).toBe("399.99px");
     expect(focusSlot.assignedNodes()[1].getImg().style.height).toBe("399.99px");
-    expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("200px");
+    expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("399.99px");
   });
 
   it("should layout with inaccurate provided width and height", async () => {
@@ -216,10 +216,10 @@ describe("img-focus layout calculation with provided width and height", () => {
     expect(getCorrectedWidthSpy).toHaveBeenCalledTimes(4);
     expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
 
-    expect(focusSlot.style.height).toBe("1665px");
+    expect(focusSlot.style.height).toBe("1865px");
     expect(focusSlot.assignedNodes()[0].getImg().style.height).toBe("799.99px");
     expect(focusSlot.assignedNodes()[1].getImg().style.height).toBe("399.99px");
     expect(focusSlot.assignedNodes()[2].getImg().style.height).toBe("249.99px");
-    expect(focusSlot.assignedNodes()[3].getImg().style.height).toBe("200px");
+    expect(focusSlot.assignedNodes()[3].getImg().style.height).toBe("399.99px");
   });
 });

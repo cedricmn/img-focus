@@ -50,7 +50,7 @@ describe("img-focus layout triggering", () => {
   });
 
   it("should layout while resizing", async () => {
-    expect.assertions(4);
+    expect.assertions(6);
 
     const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
@@ -60,22 +60,28 @@ describe("img-focus layout triggering", () => {
       layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
       resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles");
 
-    // Trigger layout
+    // Trigger layout (first ignored)
+    jest.spyOn(focusElement, "getFocusSlotBounding").mockImplementation(() => ({ width: 1000 }));
     focusSlot.dispatchEvent(event);
+    jest.runAllTimers();
 
+    expect(resetStyleSpy).toHaveBeenCalledTimes(0);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(0);
+
+    // Trigger layout with width update
+    jest.spyOn(focusElement, "getFocusSlotBounding").mockImplementation(() => ({ width: 1001 }));
+    focusSlot.dispatchEvent(event);
     jest.runAllTimers();
 
     expect(resetStyleSpy).toHaveBeenCalledTimes(1);
     expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
 
-    resetStyleSpy.mockClear();
-    layoutInternalSpy.mockClear();
-
-    // No layout
+    // No width update
     focusSlot.dispatchEvent(event);
+    jest.runAllTimers();
 
-    expect(resetStyleSpy).not.toHaveBeenCalled();
-    expect(layoutInternalSpy).not.toHaveBeenCalled();
+    expect(resetStyleSpy).toHaveBeenCalledTimes(1);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
   });
 
   it("should debounce layout while loading more photos", async () => {
@@ -93,21 +99,19 @@ describe("img-focus layout triggering", () => {
     focusSlot.assignedNodes()[0].getImg().dispatchEvent(event);
 
     expect(resetStyleSpy).toHaveBeenCalledTimes(1);
-    expect(layoutInternalSpy).not.toHaveBeenCalled();
-
-    resetStyleSpy.mockClear();
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(0);
 
     jest.advanceTimersByTime(100);
 
     // Trigger layout
     focusSlot.assignedNodes()[0].getImg().dispatchEvent(event);
 
-    expect(resetStyleSpy).not.toHaveBeenCalled();
-    expect(layoutInternalSpy).not.toHaveBeenCalled();
+    expect(resetStyleSpy).toHaveBeenCalledTimes(1);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(0);
 
     jest.advanceTimersByTime(200);
 
-    expect(resetStyleSpy).not.toHaveBeenCalled();
+    expect(resetStyleSpy).toHaveBeenCalledTimes(1);
     expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
   });
 

@@ -5,6 +5,7 @@ import { FocusElement } from "./focus.element";
 import { Photo } from "../../model/photo";
 const HEIGHT_TRIGGER = 50,
   LAYOUT_DEBOUNCE_TIME = 200,
+  LAYOUT_DIRECT_DEBOUNCE_TIME = 4,
   SIZE_MARGIN = 0.01;
 
 /**
@@ -30,18 +31,25 @@ export class FocusElementLayout {
 
   /**
    * Debounced layout.
+   *
+   * @param {boolean} direct - Direct layout to reduce debounce time.
    */
-  layout() {
+  layout(direct = false) {
     // Reset styles to do calculations
     if (!this.timeoutId) {
       this.resetStyles();
+    }
+
+    let timer = LAYOUT_DEBOUNCE_TIME;
+    if (direct) {
+      timer = LAYOUT_DIRECT_DEBOUNCE_TIME;
     }
 
     clearTimeout(this.timeoutId);
     this.timeoutId = setTimeout(() => {
       this.timeoutId = null;
       this.layoutInternal();
-    }, LAYOUT_DEBOUNCE_TIME);
+    }, timer);
   }
 
   /**

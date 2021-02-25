@@ -85,7 +85,7 @@ export class FocusElement extends HTMLElement {
       photoElement.addEventListener("img-photo-load", () => this.layout.layout());
     } else {
       // Direct layout
-      this.layout.layout();
+      this.layout.layout(true);
     }
   }
 
@@ -110,16 +110,16 @@ export class FocusElement extends HTMLElement {
   addResizeObserver() {
     let previousWidth = -1;
     new ResizeObserver(() => {
-      const currentWidth = this.focusSlot.getBoundingClientRect().width;
+      const currentWidth = this.getFocusSlotBounding().width;
 
       /*
        * Layout only for width update as height will be updated after layout
        * and will trigger useless new layout.
        */
-      if (currentWidth !== previousWidth) {
+      if (currentWidth !== previousWidth && previousWidth > -1) {
         this.layout.layout();
-        previousWidth = currentWidth;
       }
+      previousWidth = currentWidth;
     }).observe(this.focusSlot);
   }
 

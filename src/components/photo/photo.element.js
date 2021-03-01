@@ -116,6 +116,8 @@ export class PhotoElement extends HTMLElement {
    */
   setHeight(height) {
     this.img.style.height = height;
+    // Show image after first layout to avoid initial layout shift
+    this.img.classList.add("layout");
   }
 
   /**

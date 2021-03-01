@@ -5,7 +5,6 @@ import { FocusElement } from "./focus.element";
 import { Photo } from "../../model/photo";
 const HEIGHT_TRIGGER = 50,
   LAYOUT_DEBOUNCE_TIME = 200,
-  LAYOUT_DIRECT_DEBOUNCE_TIME = 4,
   SIZE_MARGIN = 0.01;
 
 /**
@@ -42,7 +41,7 @@ export class FocusElementLayout {
 
     let timer = LAYOUT_DEBOUNCE_TIME;
     if (direct) {
-      timer = LAYOUT_DIRECT_DEBOUNCE_TIME;
+      timer = 0;
     }
 
     clearTimeout(this.timeoutId);

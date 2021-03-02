@@ -80,6 +80,7 @@ export class FocusElement extends HTMLElement {
     this.insertPhoto(photo, previousPhotoElement);
 
     photoElement.addEventListener("img-photo-select", () => this.openPhoto(photo));
+    photoElement.addEventListener("img-photo-update", () => this.layout.layout());
     if (!photoElement.hasAttribute("width") || !photoElement.hasAttribute("height")) {
       // Need to wait for photo to load before doing layout
       photoElement.addEventListener("img-photo-load", () => this.layout.layout());

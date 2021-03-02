@@ -6,7 +6,7 @@ import { UtilTest } from "../../../test/utiltest";
 
 jest.useFakeTimers();
 
-describe("img-focus layout triggering", () => {
+describe("img-focus load layout triggering", () => {
   it("should layout while loading", async () => {
     expect.assertions(2);
 
@@ -23,61 +23,6 @@ describe("img-focus layout triggering", () => {
       .getImg()
       .dispatchEvent(new Event("load", { bubbles: true }));
 
-    jest.runAllTimers();
-
-    expect(resetStyleSpy).toHaveBeenCalledTimes(1);
-    expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
-  });
-
-  it("should layout when photo ready", async () => {
-    expect.assertions(4);
-
-    const { focusElement } = await UtilTest.initFocus(document),
-      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
-      resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles");
-
-    expect(resetStyleSpy).toHaveBeenCalledTimes(0);
-    expect(layoutInternalSpy).toHaveBeenCalledTimes(0);
-
-    // Trigger layout by slotting photo
-    const { photoElement } = await UtilTest.initPhoto(document, { height: 100, srcset: "focus.png 320w", width: 200 });
-    await focusElement.appendChild(photoElement);
-
-    jest.runAllTimers();
-
-    expect(resetStyleSpy).toHaveBeenCalledTimes(1);
-    expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
-  });
-
-  it("should layout while resizing", async () => {
-    expect.assertions(6);
-
-    const { focusElement, focusSlot } = await UtilTest.initFocus(
-        document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
-      ),
-      event = new Event("resize-mock", { bubbles: true }),
-      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
-      resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles");
-
-    // Trigger layout (first ignored)
-    jest.spyOn(focusElement, "getFocusSlotBounding").mockImplementation(() => ({ width: 1000 }));
-    focusSlot.dispatchEvent(event);
-    jest.runAllTimers();
-
-    expect(resetStyleSpy).toHaveBeenCalledTimes(0);
-    expect(layoutInternalSpy).toHaveBeenCalledTimes(0);
-
-    // Trigger layout with width update
-    jest.spyOn(focusElement, "getFocusSlotBounding").mockImplementation(() => ({ width: 1001 }));
-    focusSlot.dispatchEvent(event);
-    jest.runAllTimers();
-
-    expect(resetStyleSpy).toHaveBeenCalledTimes(1);
-    expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
-
-    // No width update
-    focusSlot.dispatchEvent(event);
     jest.runAllTimers();
 
     expect(resetStyleSpy).toHaveBeenCalledTimes(1);
@@ -110,6 +55,117 @@ describe("img-focus layout triggering", () => {
     expect(layoutInternalSpy).toHaveBeenCalledTimes(0);
 
     jest.advanceTimersByTime(200);
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(1);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("img-focus slotting layout triggering", () => {
+  it("should layout when slotting photo", async () => {
+    expect.assertions(4);
+
+    const { focusElement } = await UtilTest.initFocus(document),
+      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
+      resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles");
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(0);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(0);
+
+    // Trigger layout by slotting photo
+    const { photoElement } = await UtilTest.initPhoto(document, { height: 100, srcset: "focus.png 320w", width: 200 });
+    await focusElement.appendChild(photoElement);
+
+    jest.runAllTimers();
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(1);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("img-focus attributes updated layout triggering", () => {
+  it("should layout when attributes updated", async () => {
+    expect.assertions(14);
+
+    const { focusElement } = await UtilTest.initFocus(document),
+      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
+      resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles");
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(0);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(0);
+
+    // Trigger layout by slotting photo
+    const { photoElement } = await UtilTest.initPhoto(document, { height: 100, srcset: "focus.png 320w", width: 200 });
+    await focusElement.appendChild(photoElement);
+
+    jest.runAllTimers();
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(1);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
+
+    photoElement.alt = "Alternative";
+    jest.runAllTimers();
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(1);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
+
+    photoElement.sizes = "100vw";
+    jest.runAllTimers();
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(1);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
+
+    photoElement.width = "250";
+    jest.runAllTimers();
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(2);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(2);
+
+    photoElement.height = "150";
+    jest.runAllTimers();
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(3);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(3);
+
+    photoElement.srcset = "focus2.png 320w";
+    jest.runAllTimers();
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(4);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(4);
+  });
+});
+
+describe("img-focus resize layout triggering", () => {
+  it("should layout while resizing", async () => {
+    expect.assertions(6);
+
+    const { focusElement, focusSlot } = await UtilTest.initFocus(
+        document,
+        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
+      ),
+      event = new Event("resize-mock", { bubbles: true }),
+      layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
+      resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles");
+
+    // Trigger layout (first ignored)
+    jest.spyOn(focusElement, "getFocusSlotBounding").mockImplementation(() => ({ width: 1000 }));
+    focusSlot.dispatchEvent(event);
+    jest.runAllTimers();
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(0);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(0);
+
+    // Trigger layout with width update
+    jest.spyOn(focusElement, "getFocusSlotBounding").mockImplementation(() => ({ width: 1001 }));
+    focusSlot.dispatchEvent(event);
+    jest.runAllTimers();
+
+    expect(resetStyleSpy).toHaveBeenCalledTimes(1);
+    expect(layoutInternalSpy).toHaveBeenCalledTimes(1);
+
+    // No width update
+    focusSlot.dispatchEvent(event);
+    jest.runAllTimers();
 
     expect(resetStyleSpy).toHaveBeenCalledTimes(1);
     expect(layoutInternalSpy).toHaveBeenCalledTimes(1);

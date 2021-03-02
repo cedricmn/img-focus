@@ -28,9 +28,15 @@ export class PhotoElement extends HTMLElement {
 
   /**
    * Update image attributes when photo element attributes are updated.
+   *
+   * @param {string} name - Attribute name.
    */
-  attributeChangedCallback() {
+  attributeChangedCallback(name) {
     this.updateAttributes();
+    if (this.img && (name === "srcset" || name === "width" || name === "height")) {
+      // Force new layout when attributes affecting layout are updated
+      this.dispatchEvent(new Event("img-photo-update"));
+    }
   }
 
   /**

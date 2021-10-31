@@ -67,15 +67,9 @@ export class ZoomElement extends HTMLElement {
     this.closeElement = this.el.querySelector(`#${CLOSE}`);
     this.actions = [this.closeElement, this.nextElement, this.prevElement];
 
-    this.updateActions();
+    this.addFocusEventListener();
     this.addKeydownEventListener();
-
-    // Default focus on close
-    this.addEventListener("focus", () => {
-      if (!this.el.activeElement) {
-        this.closeElement.focus();
-      }
-    });
+    this.updateActions();
 
     // Close while not clicking on actions
     this.el.querySelector("#zoom").addEventListener("click", (event) => {
@@ -90,6 +84,18 @@ export class ZoomElement extends HTMLElement {
         event.preventDefault();
       });
     }
+  }
+
+  /**
+   * Add focus event listener to manage initial action focus.
+   */
+  addFocusEventListener() {
+    // Default focus on close
+    this.addEventListener("focus", () => {
+      if (!this.el.activeElement) {
+        this.closeElement.focus();
+      }
+    });
   }
 
   /**
@@ -133,10 +139,16 @@ export class ZoomElement extends HTMLElement {
    */
   updateActions() {
     if (this.prevElement) {
-      Util.setBooleanAttribute(this.prevElement, "disabled", !this.hasAttribute("hasprevious"));
+      if (!this.hasPreviousAttribute() && this.prevElement === this.el.activeElement) {
+        this.closeElement.focus();
+      }
+      Util.setBooleanAttribute(this.prevElement, "disabled", !this.hasPreviousAttribute());
     }
     if (this.nextElement) {
-      Util.setBooleanAttribute(this.nextElement, "disabled", !this.hasAttribute("hasnext"));
+      if (!this.hasNextAttribute() && this.nextElement === this.el.activeElement) {
+        this.closeElement.focus();
+      }
+      Util.setBooleanAttribute(this.nextElement, "disabled", !this.hasNextAttribute());
     }
   }
 
@@ -147,6 +159,24 @@ export class ZoomElement extends HTMLElement {
    */
   sendEvent(id) {
     this.dispatchEvent(new Event(`img-zoom-${id}`));
+  }
+
+  /**
+   * Check for "hasprevious" attribute.
+   *
+   * @returns {boolean} True if "hasprevious" attribute set.
+   */
+  hasPreviousAttribute() {
+    return this.hasAttribute("hasprevious");
+  }
+
+  /**
+   * Check for "hasnext" attribute.
+   *
+   * @returns {boolean} True if "hasnext" attribute set.
+   */
+  hasNextAttribute() {
+    return this.hasAttribute("hasnext");
   }
 
   /**

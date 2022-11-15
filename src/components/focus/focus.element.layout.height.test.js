@@ -3,6 +3,7 @@
  */
 import "../../index.js";
 import { UtilTest } from "../../../test/utiltest";
+import { jest } from "@jest/globals";
 
 jest.useFakeTimers();
 
@@ -12,7 +13,9 @@ describe("img-focus layout height update", () => {
 
     const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
+        (
+          await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })
+        ).photoElement
       ),
       event = new Event("load", { bubbles: true }),
       getFocusSlotBoundingSpy = jest.spyOn(focusElement, "getFocusSlotBounding");
@@ -38,7 +41,9 @@ describe("img-focus layout height update", () => {
 
     const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
+        (
+          await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })
+        ).photoElement
       ),
       event = new Event("load", { bubbles: true }),
       getFocusSlotBoundingSpy = jest.spyOn(focusElement, "getFocusSlotBounding");
@@ -64,7 +69,9 @@ describe("img-focus layout height update", () => {
 
     const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
+        (
+          await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })
+        ).photoElement
       ),
       event = new Event("load", { bubbles: true }),
       getFocusSlotBoundingSpy = jest.spyOn(focusElement, "getFocusSlotBounding");

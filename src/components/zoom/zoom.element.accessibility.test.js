@@ -3,6 +3,7 @@
  */
 import "../../index.js";
 import { UtilTest } from "../../../test/utiltest.js";
+import { jest } from "@jest/globals";
 
 describe("img-zoom accessibility focus trap", () => {
   it("with previous item", async () => {

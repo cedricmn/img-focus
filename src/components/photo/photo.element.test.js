@@ -3,6 +3,7 @@
  */
 import "../../index.js";
 import { UtilTest } from "../../../test/utiltest";
+import { jest } from "@jest/globals";
 
 describe("img-photo", () => {
   it("without attributes", async () => {
@@ -12,7 +13,7 @@ describe("img-photo", () => {
 
     expect(photoElement).not.toBeNull();
     expect(photoElement.getImg().hasAttribute("srcset")).toBeFalsy();
-    expect(photoElement.getImg().sizes).toStrictEqual("(min-width: 50em) 15vw, 100vw");
+    expect(photoElement.getImg().sizes).toBe("(min-width: 50em) 15vw, 100vw");
   });
 
   it("with changing srcset attribute", async () => {
@@ -21,13 +22,13 @@ describe("img-photo", () => {
     const { photoElement } = await UtilTest.initPhoto(document, { append: true, srcset: "focus.png 320w" });
 
     expect(photoElement).not.toBeNull();
-    expect(photoElement.getImg().srcset).toStrictEqual("focus.png 320w");
-    expect(photoElement.getImg().sizes).toStrictEqual("(min-width: 50em) 15vw, 100vw");
+    expect(photoElement.getImg().srcset).toBe("focus.png 320w");
+    expect(photoElement.getImg().sizes).toBe("(min-width: 50em) 15vw, 100vw");
 
     photoElement.srcset = "focus2.png 320w";
 
-    expect(photoElement.getImg().srcset).toStrictEqual("focus2.png 320w");
-    expect(photoElement.getImg().sizes).toStrictEqual("(min-width: 50em) 15vw, 100vw");
+    expect(photoElement.getImg().srcset).toBe("focus2.png 320w");
+    expect(photoElement.getImg().sizes).toBe("(min-width: 50em) 15vw, 100vw");
   });
 
   it("with changing sizes attribute", async () => {
@@ -40,13 +41,13 @@ describe("img-photo", () => {
     });
 
     expect(photoElement).not.toBeNull();
-    expect(photoElement.sizes).toStrictEqual("(min-width: 50em) 20vw, 100vw");
-    expect(photoElement.getImg().sizes).toStrictEqual("(min-width: 50em) 20vw, 100vw");
+    expect(photoElement.sizes).toBe("(min-width: 50em) 20vw, 100vw");
+    expect(photoElement.getImg().sizes).toBe("(min-width: 50em) 20vw, 100vw");
 
     photoElement.sizes = "100vw";
 
-    expect(photoElement.sizes).toStrictEqual("100vw");
-    expect(photoElement.getImg().sizes).toStrictEqual("100vw");
+    expect(photoElement.sizes).toBe("100vw");
+    expect(photoElement.getImg().sizes).toBe("100vw");
   });
 
   it("with changing width and height attributes", async () => {
@@ -60,18 +61,18 @@ describe("img-photo", () => {
     });
 
     expect(photoElement).not.toBeNull();
-    expect(photoElement.height).toStrictEqual("100");
-    expect(photoElement.getImg().height).toStrictEqual(100);
-    expect(photoElement.width).toStrictEqual("200");
-    expect(photoElement.getImg().width).toStrictEqual(200);
+    expect(photoElement.height).toBe("100");
+    expect(photoElement.getImg().height).toBe(100);
+    expect(photoElement.width).toBe("200");
+    expect(photoElement.getImg().width).toBe(200);
 
     photoElement.height = 150;
     photoElement.width = 300;
 
-    expect(photoElement.height).toStrictEqual("150");
-    expect(photoElement.getImg().height).toStrictEqual(150);
-    expect(photoElement.width).toStrictEqual("300");
-    expect(photoElement.getImg().width).toStrictEqual(300);
+    expect(photoElement.height).toBe("150");
+    expect(photoElement.getImg().height).toBe(150);
+    expect(photoElement.width).toBe("300");
+    expect(photoElement.getImg().width).toBe(300);
   });
 
   it("with changing alt attribute", async () => {
@@ -84,11 +85,11 @@ describe("img-photo", () => {
     });
 
     expect(photoElement).not.toBeNull();
-    expect(photoElement.getImg().alt).toStrictEqual("Focus photo");
+    expect(photoElement.getImg().alt).toBe("Focus photo");
 
     photoElement.alt = "";
 
-    expect(photoElement.getImg().alt).toStrictEqual("");
+    expect(photoElement.getImg().alt).toBe("");
   });
 
   it("with overlay", async () => {
@@ -105,7 +106,7 @@ describe("img-photo", () => {
 
     expect(photoElement).not.toBeNull();
     expect(photoSlot.assignedNodes()).toHaveLength(1);
-    expect(photoSlot.assignedNodes()[0]).toStrictEqual(paragraph);
+    expect(photoSlot.assignedNodes()[0]).toBe(paragraph);
   });
 });
 

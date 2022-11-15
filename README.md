@@ -16,9 +16,7 @@ Install web components through your package manager:
 npm install img-focus
 ```
 
-You can also download [dist/img-focus.js](https://github.com/cedricmn/img-focus/blob/main/dist/img-focus.js) file.
-
-Import [dist/img-focus.js](https://github.com/cedricmn/img-focus/blob/main/dist/img-focus.js) in your HTML file.
+Import `dist/img-focus.js` in your HTML file.
 Add following tags with corresponding attributes:
 
 - `img-focus` tag to setup your gallery.

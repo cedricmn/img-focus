@@ -3,6 +3,7 @@
  */
 import "../../index.js";
 import { UtilTest } from "../../../test/utiltest";
+import { jest } from "@jest/globals";
 
 jest.useFakeTimers();
 
@@ -12,7 +13,9 @@ describe("img-focus load layout triggering", () => {
 
     const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
+        (
+          await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })
+        ).photoElement
       ),
       layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
       resetStyleSpy = jest.spyOn(focusElement.layout, "resetStyles");
@@ -34,7 +37,9 @@ describe("img-focus load layout triggering", () => {
 
     const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
+        (
+          await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })
+        ).photoElement
       ),
       event = new Event("load", { bubbles: true }),
       layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
@@ -141,7 +146,9 @@ describe("img-focus resize layout triggering", () => {
 
     const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
+        (
+          await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })
+        ).photoElement
       ),
       event = new Event("resize-mock", { bubbles: true }),
       layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal"),
@@ -176,7 +183,9 @@ describe("img-focus resize layout triggering", () => {
 
     const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
+        (
+          await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })
+        ).photoElement
       ),
       event = new Event("load", { bubbles: true }),
       getFocusSlotBoundingSpy = jest.spyOn(focusElement, "getFocusSlotBounding"),

@@ -24,7 +24,7 @@ describe("copy attribute", () => {
     Util.copyAttribute(source, target, "src");
 
     expect(target.hasAttribute("src")).toBeTruthy();
-    expect(target.getAttribute("src")).toStrictEqual("focus.png");
+    expect(target.getAttribute("src")).toBe("focus.png");
   });
 
   it("with null", () => {
@@ -48,7 +48,7 @@ describe("set attribute", () => {
     Util.setAttribute(element, "src", "focus.png");
 
     expect(element.hasAttribute("src")).toBeTruthy();
-    expect(element.getAttribute("src")).toStrictEqual("focus.png");
+    expect(element.getAttribute("src")).toBe("focus.png");
   });
 
   it("with null", () => {
@@ -71,7 +71,7 @@ describe("set boolean attribute", () => {
     Util.setBooleanAttribute(element, "disabled", true);
 
     expect(element.hasAttribute("disabled")).toBeTruthy();
-    expect(element.getAttribute("disabled")).toStrictEqual("");
+    expect(element.getAttribute("disabled")).toBe("");
   });
 
   it("with false", () => {

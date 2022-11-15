@@ -3,6 +3,7 @@
  */
 import "../../index.js";
 import { UtilTest } from "../../../test/utiltest.js";
+import { jest } from "@jest/globals";
 
 describe("img-zoom", () => {
   it("without content", async () => {
@@ -39,7 +40,7 @@ describe("img-zoom", () => {
 
     expect(zoomSlot).not.toBeNull();
     expect(zoomSlot.assignedNodes()).toHaveLength(1);
-    expect(zoomSlot.assignedNodes()[0].srcset).toStrictEqual("focus.png 320w");
+    expect(zoomSlot.assignedNodes()[0].srcset).toBe("focus.png 320w");
   });
 
   it("with changing hasprevious attribute", async () => {
@@ -57,7 +58,7 @@ describe("img-zoom", () => {
     zoomElement.hasprevious = "";
 
     expect(zoomPrev.disabled).toBeFalsy();
-    expect(zoomElement.hasprevious).toStrictEqual("");
+    expect(zoomElement.hasprevious).toBe("");
   });
 
   it("with changing hasnext attribute", async () => {
@@ -75,7 +76,7 @@ describe("img-zoom", () => {
     zoomElement.hasnext = "";
 
     expect(zoomNext.disabled).toBeFalsy();
-    expect(zoomElement.hasnext).toStrictEqual("");
+    expect(zoomElement.hasnext).toBe("");
   });
 
   it("with default hasprevious and hasnext attributes", async () => {
@@ -163,4 +164,3 @@ describe("img-zoom navigation", () => {
     expect(eventCloseSpy).toHaveBeenCalledTimes(2);
   });
 });
-

@@ -1,4 +1,3 @@
-/* global module */
 /**
  * @file HTML test transformer.
  */
@@ -9,8 +8,8 @@
  * @param {*} src - HTML source.
  * @returns {string} HTML source as string.
  */
-const transformer = (src) => `module.exports =  ${JSON.stringify(src)}`;
+const transformer = (src) => ({ code: `module.exports = ${JSON.stringify(src)}` });
 
-module.exports = {
+export default {
   process: transformer,
 };

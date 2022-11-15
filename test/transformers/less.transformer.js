@@ -1,5 +1,3 @@
-/* global module */
-
 /**
  * @file LESS test transformer.
  */
@@ -9,8 +7,8 @@
  *
  * @returns {string} Empty string.
  */
-const transformer = () => `module.exports = ${JSON.stringify("")}`;
+const transformer = () => ({ code: "" });
 
-module.exports = {
+export default {
   process: transformer,
 };

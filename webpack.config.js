@@ -1,14 +1,11 @@
-"use strict";
+import StyleLintPlugin from "stylelint-webpack-plugin";
+import TerserPlugin from "terser-webpack-plugin";
+import ESLintPlugin from "eslint-webpack-plugin";
 
-const path = require("path");
-const StyleLintPlugin = require("stylelint-webpack-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
-
-module.exports = () => {
+export default () => {
   const config = {
     entry: "./src/index.js",
     output: {
-      path: path.resolve(__dirname, "./dist"),
       filename: "img-focus.js",
       iife: true,
     },
@@ -16,18 +13,9 @@ module.exports = () => {
       rules: [
         {
           test: /\.js$/,
-          exclude: /node_modules/,
-          use: [
-            {
-              loader: "eslint-loader",
-              options: {
-                emitError: true,
-                emitWarning: true,
-                failOnWarning: true,
-                failOnError: true,
-              },
-            },
-          ],
+          resolve: {
+            fullySpecified: false,
+          },
         },
         {
           test: /\.less$/,
@@ -72,15 +60,19 @@ module.exports = () => {
         failOnError: true,
         failOnWarning: true,
         files: "**/*.less",
-        syntax: "less",
+        customSyntax: "postcss-less",
+      }),
+      new ESLintPlugin({
+        emitError: true,
+        emitWarning: true,
+        failOnWarning: true,
+        failOnError: true,
       }),
     ],
-    devServer: {
-      contentBase: path.resolve(__dirname, "./dist"),
-    },
     optimization: {
       minimizer: [new TerserPlugin()],
     },
+    resolve: { fallback: { url: false } },
   };
 
   if (process.env.NODE_ENV === "development") {

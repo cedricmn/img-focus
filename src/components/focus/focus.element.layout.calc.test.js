@@ -3,6 +3,7 @@
  */
 import "../../index.js";
 import { UtilTest } from "../../../test/utiltest";
+import { jest } from "@jest/globals";
 
 jest.useFakeTimers();
 
@@ -12,7 +13,9 @@ describe("img-focus layout calculation", () => {
 
     const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement
+        (
+          await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })
+        ).photoElement
       ),
       event = new Event("load", { bubbles: true }),
       getCorrectedWidthSpy = jest.spyOn(focusElement.layout, "getCorrectedWidth"),
@@ -49,9 +52,15 @@ describe("img-focus layout calculation", () => {
 
     const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement,
-        (await UtilTest.initPhoto(document, { srcset: "focus2.png 320w" })).photoElement,
-        (await UtilTest.initPhoto(document, { srcset: "focus3.png 320w" })).photoElement
+        (
+          await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })
+        ).photoElement,
+        (
+          await UtilTest.initPhoto(document, { srcset: "focus2.png 320w" })
+        ).photoElement,
+        (
+          await UtilTest.initPhoto(document, { srcset: "focus3.png 320w" })
+        ).photoElement
       ),
       event = new Event("load", { bubbles: true }),
       getCorrectedWidthSpy = jest.spyOn(focusElement.layout, "getCorrectedWidth"),
@@ -96,9 +105,15 @@ describe("img-focus layout calculation", () => {
 
     const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })).photoElement,
-        (await UtilTest.initPhoto(document, { srcset: "focus2.png 320w" })).photoElement,
-        (await UtilTest.initPhoto(document, { srcset: "focus3.png 320w" })).photoElement
+        (
+          await UtilTest.initPhoto(document, { srcset: "focus.png 320w" })
+        ).photoElement,
+        (
+          await UtilTest.initPhoto(document, { srcset: "focus2.png 320w" })
+        ).photoElement,
+        (
+          await UtilTest.initPhoto(document, { srcset: "focus3.png 320w" })
+        ).photoElement
       ),
       event = new Event("load", { bubbles: true }),
       getCorrectedWidthSpy = jest.spyOn(focusElement.layout, "getCorrectedWidth"),
@@ -143,9 +158,15 @@ describe("img-focus layout calculation with provided width and height", () => {
 
     const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus.png 320w", width: 100 })).photoElement,
-        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus2.png 320w", width: 100 })).photoElement,
-        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 100 })).photoElement
+        (
+          await UtilTest.initPhoto(document, { height: 200, srcset: "focus.png 320w", width: 100 })
+        ).photoElement,
+        (
+          await UtilTest.initPhoto(document, { height: 200, srcset: "focus2.png 320w", width: 100 })
+        ).photoElement,
+        (
+          await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 100 })
+        ).photoElement
       ),
       getCorrectedWidthSpy = jest.spyOn(focusElement.layout, "getCorrectedWidth"),
       layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal");
@@ -185,10 +206,18 @@ describe("img-focus layout calculation with provided width and height", () => {
     // With width of 50, 100, 160 instead of 100
     const { focusElement, focusSlot } = await UtilTest.initFocus(
         document,
-        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus.png 320w", width: 50 })).photoElement,
-        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus2.png 320w", width: 100 })).photoElement,
-        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 160 })).photoElement,
-        (await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 100 })).photoElement
+        (
+          await UtilTest.initPhoto(document, { height: 200, srcset: "focus.png 320w", width: 50 })
+        ).photoElement,
+        (
+          await UtilTest.initPhoto(document, { height: 200, srcset: "focus2.png 320w", width: 100 })
+        ).photoElement,
+        (
+          await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 160 })
+        ).photoElement,
+        (
+          await UtilTest.initPhoto(document, { height: 200, srcset: "focus3.png 320w", width: 100 })
+        ).photoElement
       ),
       getCorrectedWidthSpy = jest.spyOn(focusElement.layout, "getCorrectedWidth"),
       layoutInternalSpy = jest.spyOn(focusElement.layout, "layoutInternal");

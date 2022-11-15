@@ -2,7 +2,7 @@
   "parserOptions": {
     "sourceType": "module"
   },
-  "extends": ["eslint:all", "plugin:jest/all", "plugin:jest-formatting/strict"],
+  "extends": ["eslint:all"],
   "plugins": ["jsdoc"],
   "env": {
     "browser": true,
@@ -12,7 +12,7 @@
   "rules": {
     "jsdoc/check-access": "error",
     "jsdoc/check-alignment": "error",
-    "jsdoc/check-examples": "error",
+    "jsdoc/check-examples": "off",
     "jsdoc/check-indentation": "error",
     "jsdoc/check-line-alignment": "error",
     "jsdoc/check-param-names": "error",
@@ -127,12 +127,19 @@
   "overrides": [
     {
       "files": ["*.test.js", "test/**"],
+      "extends": ["plugin:jest/all", "plugin:jest-formatting/strict"],
       "rules": {
         "no-magic-numbers": "off",
         "max-lines-per-function": ["error", 150],
         "one-var": ["error", "consecutive"],
         "no-new": "off",
-        "max-statements": ["error", 30]
+        "max-statements": ["error", 30],
+        "jest/max-expects": [
+          "error",
+          {
+            "max": 15
+          }
+        ]
       }
     }
   ]

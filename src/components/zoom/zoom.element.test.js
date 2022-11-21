@@ -90,7 +90,7 @@ describe("img-zoom", () => {
   });
 });
 
-describe("img-zoom navigation", () => {
+describe("img-zoom desktop navigation", () => {
   it("with keyboard", async () => {
     expect.assertions(4);
 
@@ -162,5 +162,87 @@ describe("img-zoom navigation", () => {
     expect(eventPrevSpy).toHaveBeenCalledTimes(0);
     expect(eventNextSpy).toHaveBeenCalledTimes(0);
     expect(eventCloseSpy).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe("img-zoom mobile navigation", () => {
+  it("with previous swipe", async () => {
+    expect.assertions(3);
+
+    const eventCloseSpy = jest.fn(),
+      eventNextSpy = jest.fn(),
+      eventPrevSpy = jest.fn(),
+      img = document.createElement("img"),
+      touchEndEvent = new TouchEvent("touchend", {
+        bubbles: true,
+        changedTouches: [
+          {
+            clientX: 20,
+          },
+        ],
+      }),
+      touchStartEvent = new TouchEvent("touchstart", {
+        bubbles: true,
+        changedTouches: [
+          {
+            clientX: 10,
+          },
+        ],
+      });
+
+    img.srcset = "focus.png 320w";
+    img.size = "100vw";
+
+    const { zoomSlot, zoomElement } = await UtilTest.initZoom(document, { append: true }, img);
+    zoomElement.addEventListener("img-zoom-prev", eventPrevSpy);
+    zoomElement.addEventListener("img-zoom-next", eventNextSpy);
+    zoomElement.addEventListener("img-zoom-close", eventCloseSpy);
+
+    zoomSlot.dispatchEvent(touchStartEvent);
+    zoomSlot.dispatchEvent(touchEndEvent);
+
+    expect(eventPrevSpy).toHaveBeenCalledTimes(1);
+    expect(eventNextSpy).toHaveBeenCalledTimes(0);
+    expect(eventCloseSpy).toHaveBeenCalledTimes(0);
+  });
+
+  it("with next swipe", async () => {
+    expect.assertions(3);
+
+    const eventCloseSpy = jest.fn(),
+      eventNextSpy = jest.fn(),
+      eventPrevSpy = jest.fn(),
+      img = document.createElement("img"),
+      touchEndEvent = new TouchEvent("touchend", {
+        bubbles: true,
+        changedTouches: [
+          {
+            clientX: 10,
+          },
+        ],
+      }),
+      touchStartEvent = new TouchEvent("touchstart", {
+        bubbles: true,
+        changedTouches: [
+          {
+            clientX: 20,
+          },
+        ],
+      });
+
+    img.srcset = "focus.png 320w";
+    img.size = "100vw";
+
+    const { zoomSlot, zoomElement } = await UtilTest.initZoom(document, { append: true }, img);
+    zoomElement.addEventListener("img-zoom-prev", eventPrevSpy);
+    zoomElement.addEventListener("img-zoom-next", eventNextSpy);
+    zoomElement.addEventListener("img-zoom-close", eventCloseSpy);
+
+    zoomSlot.dispatchEvent(touchStartEvent);
+    zoomSlot.dispatchEvent(touchEndEvent);
+
+    expect(eventPrevSpy).toHaveBeenCalledTimes(0);
+    expect(eventNextSpy).toHaveBeenCalledTimes(1);
+    expect(eventCloseSpy).toHaveBeenCalledTimes(0);
   });
 });

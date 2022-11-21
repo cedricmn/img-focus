@@ -67,10 +67,17 @@ export class ZoomElement extends HTMLElement {
     this.closeElement = this.el.querySelector(`#${CLOSE}`);
     this.actions = [this.closeElement, this.nextElement, this.prevElement];
 
+    this.addClickEventListeners();
     this.addFocusEventListener();
     this.addKeydownEventListener();
+    this.addTouchEventListeners();
     this.updateActions();
+  }
 
+  /**
+   * Add click event listeners to manage actions.
+   */
+  addClickEventListeners() {
     // Close while not clicking on actions
     this.el.querySelector("#zoom").addEventListener("click", (event) => {
       if (![CLOSE, PREV, NEXT].includes(event.target.id)) {
@@ -79,7 +86,7 @@ export class ZoomElement extends HTMLElement {
     });
 
     for (const id of [CLOSE, PREV, NEXT]) {
-      this.shadowRoot.querySelector(`#${id}`).addEventListener("click", (event) => {
+      this.el.querySelector(`#${id}`).addEventListener("click", (event) => {
         this.sendEvent(id);
         event.preventDefault();
       });
@@ -99,7 +106,7 @@ export class ZoomElement extends HTMLElement {
   }
 
   /**
-   * Add keyboad event listener to manage keyboard navigation.
+   * Add keydown event listener to manage keyboard navigation.
    */
   addKeydownEventListener() {
     // Keyboard navigation
@@ -131,6 +138,23 @@ export class ZoomElement extends HTMLElement {
           return;
       }
       event.preventDefault();
+    });
+  }
+
+  /**
+   * Add touch event listeners to manage mobile actions.
+   */
+  addTouchEventListeners() {
+    let startX = 0;
+    this.el.querySelector("#slot").addEventListener("touchstart", (event) => {
+      startX = event.changedTouches[0].clientX;
+    });
+    this.el.querySelector("#slot").addEventListener("touchend", (event) => {
+      if (event.changedTouches[0].clientX - startX > 0) {
+        this.sendEvent(PREV);
+      } else {
+        this.sendEvent(NEXT);
+      }
     });
   }
 

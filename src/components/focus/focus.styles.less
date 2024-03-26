@@ -5,8 +5,7 @@
   display: flex;
   flex-wrap: wrap;
   align-content: start;
-  row-gap: var(--img-focus-gap, 0);
-  column-gap: var(--img-focus-gap, 0);
+  gap: var(--img-focus-gap, 0);
 }
 
 #focus::slotted(*) {
@@ -14,7 +13,7 @@
   text-align: center;
 }
 
-@media (max-width: 50em) {
+@media (width <= 50em) {
   #focus::slotted(*) {
     width: 100%;
   }

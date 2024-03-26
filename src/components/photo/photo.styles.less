@@ -10,13 +10,13 @@ img.layout {
   opacity: 1;
 }
 
-@media (min-width: 50em) {
+@media (width > 50em) {
   img {
     height: var(--img-focus-lines-height, 200px);
   }
 }
 
-@media (max-width: 50em) {
+@media (width <= 50em) {
   img {
     width: 100%;
   }

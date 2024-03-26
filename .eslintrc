@@ -24,7 +24,6 @@
     "jsdoc/empty-tags": "error",
     "jsdoc/implements-on-classes": "error",
     "jsdoc/match-description": "error",
-    "jsdoc/newline-after-description": "error",
     "jsdoc/no-bad-blocks": "error",
     "jsdoc/no-defaults": "error",
     "jsdoc/no-types": "off",

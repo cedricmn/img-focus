@@ -2,8 +2,8 @@
  * @file Focus element tests.
  */
 import "../../index.js";
+import { describe, expect, it, jest } from '@jest/globals';
 import { UtilTest } from "../../../test/utiltest";
-import { jest } from "@jest/globals";
 
 describe("img-focus", () => {
   it("with empty sloted content", async () => {

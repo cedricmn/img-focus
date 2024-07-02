@@ -2,8 +2,8 @@
  * @file Zoom element tests.
  */
 import "../../index.js";
+import { describe, expect, it, jest } from '@jest/globals';
 import { UtilTest } from "../../../test/utiltest.js";
-import { jest } from "@jest/globals";
 
 describe("img-zoom", () => {
   it("without content", async () => {

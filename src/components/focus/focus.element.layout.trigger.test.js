@@ -2,8 +2,8 @@
  * @file Focus element layout triggering tests.
  */
 import "../../index.js";
+import { describe, expect, it, jest } from '@jest/globals';
 import { UtilTest } from "../../../test/utiltest";
-import { jest } from "@jest/globals";
 
 jest.useFakeTimers();
 

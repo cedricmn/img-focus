@@ -1,6 +1,7 @@
 /**
  * @file Util class tests.
  */
+import { describe, expect, it } from '@jest/globals';
 import { Util } from "./util";
 
 describe("copy attribute", () => {

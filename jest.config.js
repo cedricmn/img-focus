@@ -13,9 +13,5 @@ export default {
       },
       setupFiles: ["<rootDir>/test/setup.js"],
     },
-    {
-      displayName: "lint",
-      runner: "jest-runner-eslint",
-    },
   ],
 };

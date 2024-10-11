@@ -13,6 +13,7 @@
         "dist/focus.js"
     ],
     "scripts": {
+        "pretest": "eslint **/*.test.js test/**/*",
         "test": "NODE_OPTIONS=--experimental-vm-modules jest",
         "start": "webpack serve --mode=development",
         "build": "webpack --mode=production"
@@ -22,30 +23,29 @@
     "devDependencies": {
         "css-hot-loader": "^1.4.4",
         "css-loader": "^7.1.2",
-        "cssnano": "^7.0.3",
-        "eslint": "^8.57.0",
-        "eslint-plugin-jest": "^28.6.0",
+        "cssnano": "^7.0.6",
+        "eslint": "^9.12.0",
+        "eslint-plugin-jest": "^28.8.3",
         "eslint-plugin-jest-formatting": "^3.1.0",
-        "eslint-plugin-jsdoc": "^48.5.0",
+        "eslint-plugin-jsdoc": "^50.3.2",
         "eslint-webpack-plugin": "^4.2.0",
-        "html-loader": "^5.0.0",
+        "html-loader": "^5.1.0",
         "htmlhint-loader": "^1.3.1",
         "jest": "^29.7.0",
         "jest-environment-jsdom": "^29.7.0",
-        "jest-runner-eslint": "^2.2.0",
         "less": "^4.2.0",
         "less-loader": "^12.2.0",
         "postcss-less": "^6.0.0",
         "postcss-loader": "^8.1.1",
-        "prettier": "^3.3.2",
+        "prettier": "^3.3.3",
         "style-loader": "^4.0.0",
-        "stylelint": "^16.6.1",
+        "stylelint": "^16.10.0",
         "stylelint-config-recommended": "^14.0.1",
         "stylelint-config-standard": "^36.0.1",
         "stylelint-webpack-plugin": "^5.0.1",
         "terser-webpack-plugin": "^5.3.10",
-        "webpack": "^5.92.1",
+        "webpack": "^5.95.0",
         "webpack-cli": "^5.1.4",
-        "webpack-dev-server": "^5.0.4"
+        "webpack-dev-server": "^5.1.0"
     }
 }

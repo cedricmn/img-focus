@@ -67,6 +67,7 @@ export default () => {
         emitWarning: true,
         failOnWarning: true,
         failOnError: true,
+        configType: "flat",
       }),
     ],
     optimization: {
